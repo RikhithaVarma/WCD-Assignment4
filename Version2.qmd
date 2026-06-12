@@ -1,0 +1,93 @@
+---
+title: "Assignment 4 Version 2: Data Loading and Inspection"
+author: "Rikhitha Varma"
+format:
+  html:
+    toc: true
+    code-fold: true
+execute:
+  warning: false
+  message: false
+---
+
+# Purpose of this version
+
+This version focuses on loading and inspecting the raw datasets. The main aim is to identify which workbook sheets and variables are useful for the final analysis.
+
+# Setup
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(sf)
+library(stringr)
+```
+
+# Inspect VPHS workbook
+
+```{r}
+vphs_sheets <- excel_sheets("raw_data/vphs/2020 VPHS Dashboard_FINAL.xlsm")
+vphs_sheets
+```
+
+# Load VPHS SummaryData
+
+```{r}
+summary_data <- read_excel(
+  "raw_data/vphs/2020 VPHS Dashboard_FINAL.xlsm",
+  sheet = "SummaryData"
+)
+
+glimpse(summary_data)
+```
+
+# Inspect available VPHS indicators
+
+```{r}
+unique(summary_data$Indicator)
+```
+
+# Inspect available VPHS variables
+
+```{r}
+unique(summary_data$Variables)
+```
+
+# Load SEIFA workbook
+
+```{r}
+seifa_sheets <- excel_sheets(
+  "raw_data/seifa/Local Government Area, Indexes, SEIFA 2021.xlsx"
+)
+
+seifa_sheets
+```
+
+# Inspect SEIFA Table 1
+
+```{r}
+seifa_raw <- read_excel(
+  "raw_data/seifa/Local Government Area, Indexes, SEIFA 2021.xlsx",
+  sheet = "Table 1"
+)
+
+glimpse(seifa_raw)
+names(seifa_raw)
+```
+
+# Load LGA boundaries
+
+```{r}
+lga_boundaries <- st_read(
+  "raw_data/boundaries/LGA_2021_AUST_GDA2020_SHP/LGA_2021_AUST_GDA2020.shp"
+)
+
+glimpse(lga_boundaries)
+```
+
+# Notes from this version
+
+In this version I checked the VPHS workbook and verified that SummaryData is the sheet best suited for analysis. The workbook contains mental health and wellbeing indicators including psychological distress and life satisfaction and socioeconomic indicators including food insecurity. I also began checking the SEIFA and LGA boundary datasets so that later versions can join the data by Local Government Area
+
+## 
