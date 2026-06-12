@@ -1,0 +1,233 @@
+---
+title: "Assignment 4 Version 2: Data Loading and Inspection"
+author: "Rikhitha Varma"
+format:
+  html:
+    toc: true
+    code-fold: true
+execute:
+  warning: false
+  message: false
+---
+
+## Purpose of this version
+
+This version focuses on cleaning and preparing the datasets for analysis. The aim is to extract mental health and socioeconomic indicators, prepare a SEIFA disadvantage measure, and create a dataset that can be used for further analysis.
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(sf)
+library(stringr)
+```
+
+```{r}
+summary_data <- read_excel(
+  "raw_data/vphs/2020 VPHS Dashboard_FINAL.xlsm",
+  sheet = "SummaryData"
+)
+```
+
+```{r}
+psychological_distress <- summary_data %>%
+  filter(
+    Indicator == "MENTAL HEALTH and WELLBEING - Level of psychological distress",
+    Variables == "High / very high (K10 22+)"
+  ) %>%
+  select(
+    LGA,
+    distress_pct = `%...4`
+  )
+
+head(psychological_distress)
+```
+
+```{r}
+life_satisfaction <- summary_data %>%
+  filter(
+    Indicator == "MENTAL HEALTH and WELLBEING - Life satisfaction",
+    Variables == "Low or medium (0–6)"
+  ) %>%
+  select(
+    LGA,
+    life_satisfaction_pct = `%...4`
+  )
+
+head(life_satisfaction)
+```
+
+```{r}
+food_insecurity <- summary_data %>%
+  filter(
+    Indicator == "POVERTY - Ran out of money to buy food in last 12 months",
+    Variables == "Ran out of money to buy food in last 12 months"
+  ) %>%
+  select(
+    LGA,
+    food_insecurity_pct = `%...4`
+  )
+
+head(food_insecurity)
+```
+
+```{r}
+dim(psychological_distress)
+```
+
+```{r}
+dim(life_satisfaction)
+```
+
+```{r}
+dim(food_insecurity)
+```
+
+```{r}
+seifa_raw <- read_excel(
+  "raw_data/seifa/Local Government Area, Indexes, SEIFA 2021.xlsx",
+  sheet = "Table 1",
+  skip = 4
+)
+
+names(seifa_raw)
+glimpse(seifa_raw)
+```
+
+```{r}
+seifa_clean <- seifa_raw %>%
+  slice(-1) %>%
+  transmute(
+    lga_code = as.character(`...1`),
+    lga_name = as.character(`...2`),
+    irsd_score = as.numeric(`Index of Relative Socio-economic Disadvantage`),
+    irsd_decile = as.numeric(`...4`),
+    irsad_score = as.numeric(`Index of Relative Socio-economic Advantage and Disadvantage`),
+    irsad_decile = as.numeric(`...6`),
+    population = as.numeric(`...11`)
+  )
+
+head(seifa_clean)
+```
+
+```{r}
+summary(seifa_clean)
+```
+
+```{r}
+sort(unique(psychological_distress$LGA))[1:20]
+```
+
+```{r}
+sort(unique(seifa_clean$lga_name))[1:20]
+```
+
+```{r}
+clean_vphs_lga <- function(x) {
+  x %>%
+    str_remove("\\s*\\([^\\)]*\\)$") %>%
+    str_squish()
+}
+
+psychological_distress_clean <- psychological_distress %>%
+  mutate(lga_name = clean_vphs_lga(LGA))
+
+life_satisfaction_clean <- life_satisfaction %>%
+  mutate(lga_name = clean_vphs_lga(LGA))
+
+food_insecurity_clean <- food_insecurity %>%
+  mutate(lga_name = clean_vphs_lga(LGA))
+```
+
+```{r}
+analysis_data <- psychological_distress_clean %>%
+  select(lga_name, distress_pct) %>%
+  left_join(
+    life_satisfaction_clean %>%
+      select(lga_name, life_satisfaction_pct),
+    by = "lga_name"
+  ) %>%
+  left_join(
+    food_insecurity_clean %>%
+      select(lga_name, food_insecurity_pct),
+    by = "lga_name"
+  ) %>%
+  left_join(
+    seifa_clean %>%
+      select(lga_name, irsd_score, irsad_score, population),
+    by = "lga_name"
+  )
+
+head(analysis_data)
+dim(analysis_data)
+```
+
+```{r}
+names(food_insecurity)
+```
+
+```{r}
+summary_data %>%
+  filter(
+    Indicator == "POVERTY - Ran out of money to buy food in last 12 months"
+  ) %>%
+  count(Variables)
+```
+
+```{r}
+summary_data %>%
+  filter(
+    Indicator == "MENTAL HEALTH and WELLBEING - Level of psychological distress"
+  ) %>%
+  count(Variables)
+```
+
+```{r}
+summary_data %>%
+  filter(
+    Indicator == "MENTAL HEALTH and WELLBEING - Life satisfaction"
+  ) %>%
+  count(Variables)
+```
+
+```{r}
+analysis_data %>%
+  filter(is.na(irsd_score)) %>%
+  select(lga_name, distress_pct, life_satisfaction_pct, food_insecurity_pct)
+```
+
+```{r}
+analysis_data_clean <- analysis_data %>%
+  filter(!is.na(irsd_score))
+```
+
+```{r}
+dim(analysis_data_clean)
+```
+
+```{r}
+dir.create("processed_data", showWarnings = FALSE)
+
+write_csv(
+  analysis_data_clean,
+  "processed_data/analysis_data.csv"
+)
+```
+
+```{r}
+file.exists("processed_data/analysis_data.csv")
+```
+
+## Findings from Version 3
+
+This version was about cleaning and integrating the data sets needed for the analysis.
+
+The Victorian Population Health Survey provided three key indicators: psychological distress (high or very high), life satisfaction (low or medium) and food insecurity. The reason for choosing these indicators is that they are complementary measures of mental wellbeing and socioeconomic hardship.
+
+The ABS SEIFA 2021 dataset was cleaned and reduced to the variables needed for analysis (IRSD scores, IRSAD scores and population estimates). Local Government Area names were standardised to improve matching across datasets.
+
+However 26 records were unable to be matched during the integration process as they were larger health regions, divisions or aggregated geographic areas rather than individual LGAs. These records were excluded to be consistent with the unit of analysis.
+
+The final processed dataset includes 75 Victorian LGAs with indicators of mental health and wellbeing, food insecurity and socioeconomic disadvantage. The dataset was saved in the processed_data folder for further analysis and visualisation.
+
+## 

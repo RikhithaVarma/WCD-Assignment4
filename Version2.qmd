@@ -69,11 +69,13 @@ seifa_sheets
 ```{r}
 seifa_raw <- read_excel(
   "raw_data/seifa/Local Government Area, Indexes, SEIFA 2021.xlsx",
-  sheet = "Table 1"
+  sheet = "Table 1",
+  skip = 5
 )
 
 glimpse(seifa_raw)
 names(seifa_raw)
+head(seifa_raw)
 ```
 
 # Load LGA boundaries
@@ -89,5 +91,21 @@ glimpse(lga_boundaries)
 # Notes from this version
 
 In this version I checked the VPHS workbook and verified that SummaryData is the sheet best suited for analysis. The workbook contains mental health and wellbeing indicators including psychological distress and life satisfaction and socioeconomic indicators including food insecurity. I also began checking the SEIFA and LGA boundary datasets so that later versions can join the data by Local Government Area
+
+## Findings from Version 2
+
+The focus of this version was to look at and understand the available datasets.
+
+The VPHS SummaryData sheet was chosen as the best data source for the analysis because it contains Local Government Area level estimates for mental health, wellbeing, social capital and poverty indicators.
+
+The key indicators selected for further investigation are:
+
+-   High or very high psychological distress
+-   Life satisfaction
+-   Food insecurity (ran out of money to buy food)
+
+The SEIFA 2021 dataset was reviewed and contains Local Government Area level disadvantage scores that can be matched to the VPHS indicators.
+
+The ABS LGA boundary shapefile was successfully loaded and will be used for mapping in later releases.
 
 ## 

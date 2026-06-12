@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Rikhitha Varma">
+
+<title>Assignment 4 Version 2: Data Loading and Inspection</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Version2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Version2_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Version2_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Version2_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="Version2_files/libs/quarto-html/popper.min.js"></script>
+<script src="Version2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Version2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Version2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Version2_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Version2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Version2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Version2_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#purpose-of-this-version" id="toc-purpose-of-this-version" class="nav-link active" data-scroll-target="#purpose-of-this-version">Purpose of this version</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#inspect-vphs-workbook" id="toc-inspect-vphs-workbook" class="nav-link" data-scroll-target="#inspect-vphs-workbook">Inspect VPHS workbook</a></li>
+  <li><a href="#load-vphs-summarydata" id="toc-load-vphs-summarydata" class="nav-link" data-scroll-target="#load-vphs-summarydata">Load VPHS SummaryData</a></li>
+  <li><a href="#inspect-available-vphs-indicators" id="toc-inspect-available-vphs-indicators" class="nav-link" data-scroll-target="#inspect-available-vphs-indicators">Inspect available VPHS indicators</a></li>
+  <li><a href="#inspect-available-vphs-variables" id="toc-inspect-available-vphs-variables" class="nav-link" data-scroll-target="#inspect-available-vphs-variables">Inspect available VPHS variables</a></li>
+  <li><a href="#load-seifa-workbook" id="toc-load-seifa-workbook" class="nav-link" data-scroll-target="#load-seifa-workbook">Load SEIFA workbook</a></li>
+  <li><a href="#inspect-seifa-table-1" id="toc-inspect-seifa-table-1" class="nav-link" data-scroll-target="#inspect-seifa-table-1">Inspect SEIFA Table 1</a></li>
+  <li><a href="#load-lga-boundaries" id="toc-load-lga-boundaries" class="nav-link" data-scroll-target="#load-lga-boundaries">Load LGA boundaries</a></li>
+  <li><a href="#notes-from-this-version" id="toc-notes-from-this-version" class="nav-link" data-scroll-target="#notes-from-this-version">Notes from this version</a>
+  <ul class="collapse">
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Assignment 4 Version 2: Data Loading and Inspection</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Rikhitha Varma </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="purpose-of-this-version" class="level1">
+<h1>Purpose of this version</h1>
+<p>This version focuses on loading and inspecting the raw datasets. The main aim is to identify which workbook sheets and variables are useful for the final analysis.</p>
+</section>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="inspect-vphs-workbook" class="level1">
+<h1>Inspect VPHS workbook</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>vphs_sheets <span class="ot">&lt;-</span> <span class="fu">excel_sheets</span>(<span class="st">"raw_data/vphs/2020 VPHS Dashboard_FINAL.xlsm"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>vphs_sheets</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Index"                  "Infographic"            "Estimates by Indicator"
+ [4] "Estimates by LGA"       "Aggregated estimates"   "Area"                  
+ [7] "PHN"                    "Age groups"             "Time series"           
+[10] "Methods and notes"      "Concordance"            "Lookup"                
+[13] "Geography LOOKUP"       "Speedometer"            "InfographData"         
+[16] "InfographRank"          "TimeseriesSignificance" "Calculations"          
+[19] "Chart data"             "SummaryData"            "Selected Results Data" 
+[22] "AreasData"              "PHNData"                "Socioeconomic"         
+[25] "RiskFactors"            "AgeGroupData"           "TimeseriesData"        
+[28] "Sheet4"                </code></pre>
+</div>
+</div>
+</section>
+<section id="load-vphs-summarydata" class="level1">
+<h1>Load VPHS SummaryData</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>summary_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"raw_data/vphs/2020 VPHS Dashboard_FINAL.xlsm"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sheet =</span> <span class="st">"SummaryData"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(summary_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 7,974
+Columns: 17
+$ Indicator   &lt;chr&gt; "OBESITY - BMI", "OBESITY - BMI", "OBESITY - BMI", "OBESIT…
+$ Variables   &lt;chr&gt; "Underweight (BMI &lt; 18.5)", "Underweight (BMI &lt; 18.5)", "U…
+$ LGA         &lt;chr&gt; "Alpine (S)", "Ararat (RC)", "Ballarat (C)", "Banyule (C)"…
+$ `%...4`     &lt;dbl&gt; 1.8563950, NA, NA, NA, NA, NA, 4.2168010, NA, 2.5616920, 2…
+$ LL...5      &lt;dbl&gt; 0.7514866, NA, NA, NA, NA, NA, 1.7137690, NA, 1.0226040, 0…
+$ UL...6      &lt;dbl&gt; 4.511991, NA, NA, NA, NA, NA, 10.003530, NA, 6.270462, 5.6…
+$ RSE...7     &lt;dbl&gt; 45.84223, 52.47093, 60.60486, 100.13538, 74.83689, 70.3344…
+$ ...8        &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ `%...9`     &lt;dbl&gt; 1.8563950, NA, NA, NA, NA, NA, 4.2168010, NA, 2.5616920, 2…
+$ Reliability &lt;chr&gt; "*", "**", "**", "**", "**", "**", "*", "**", "*", "*", "*…
+$ LL...11     &lt;dbl&gt; 0.7514866, NA, NA, NA, NA, NA, 1.7137690, NA, 1.0226040, 0…
+$ UL...12     &lt;dbl&gt; 4.511991, NA, NA, NA, NA, NA, 10.003530, NA, 6.270462, 5.6…
+$ SE          &lt;dbl&gt; 0.8510128, 2.1184310, 0.8889006, 0.2841697, 1.0170700, 0.3…
+$ RSE...14    &lt;dbl&gt; 45.84223, 52.47093, 60.60486, 100.13538, 74.83689, 70.3344…
+$ ...15       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ ...16       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ ...17       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</code></pre>
+</div>
+</div>
+</section>
+<section id="inspect-available-vphs-indicators" class="level1">
+<h1>Inspect available VPHS indicators</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(summary_data<span class="sc">$</span>Indicator)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "OBESITY - BMI"                                                                            
+ [2] "OBESITY - Overweight category"                                                            
+ [3] "OBESITY - Extended BMI category"                                                          
+ [4] "SMOKING - Smoking status"                                                                 
+ [5] "MENTAL HEALTH and WELLBEING - Level of psychological distress"                            
+ [6] "MENTAL HEALTH and WELLBEING - Self-reported health status"                                
+ [7] "MENTAL HEALTH and WELLBEING - Life satisfaction"                                          
+ [8] "SOCIAL CAPITAL - Feeling of trust - Most people could be trusted"                         
+ [9] "SOCIAL CAPITAL - Tolerance of diversity - Multiculturalism makes life in your area better"
+[10] "SOCIAL CAPITAL - Feelings of being valued by society"                                     
+[11] "SOCIAL CAPITAL - Neighbourhood tenure (years)"                                            
+[12] "SOCIAL CAPITAL - Home ownership status"                                                   
+[13] "SOCIAL CAPITAL - Do you have close friends or family whom you talk to regularly?"         
+[14] "SOCIAL CAPITAL - How often do you talk to your friends?"                                  
+[15] "SOCIAL CAPITAL - How often do you talk to your family?"                                   
+[16] "POVERTY - Ran out of money to buy food in last 12 months"                                 </code></pre>
+</div>
+</div>
+</section>
+<section id="inspect-available-vphs-variables" class="level1">
+<h1>Inspect available VPHS variables</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(summary_data<span class="sc">$</span>Variables)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Underweight (BMI &lt; 18.5)"                      
+ [2] "Normal weight (18.5 ≥ BMI &lt; 25)"               
+ [3] "Overweight, but not obese (25 ≥ BMI &lt; 30)"     
+ [4] "Obese (BMI  ≥ 30)"                             
+ [5] "Overweight (BMI  ≥ 25)"                        
+ [6] "Not-overweight (BMI &lt;25)"                      
+ [7] "Don't know/Refused to answer"                  
+ [8] "Obese Class I (30 ≥ BMI &lt; 35)"                 
+ [9] "Obese Class II (35 ≥ BMI &lt; 40)"                
+[10] "Obese Class III (BMI  ≥ 40)"                   
+[11] "Daily smoker"                                  
+[12] "Occasional smoker"                             
+[13] "Ex-smoker"                                     
+[14] "Non-smoker"                                    
+[15] "e-cigarettes only with/without nicotine"       
+[16] "Current smoker (Daily + Occassional)"          
+[17] "High (K10 22–29)"                              
+[18] "Very high (K10 30+)"                           
+[19] "Low (K10 &lt; 16)"                                
+[20] "Moderate (K10 16–21)"                          
+[21] "High / very high (K10 22+)"                    
+[22] "Excellent / very good"                         
+[23] "Good"                                          
+[24] "Fair/poor"                                     
+[25] "Low or medium (0–6)"                           
+[26] "High (7–8)"                                    
+[27] "Very high (9–10)"                              
+[28] "Never, or not often"                           
+[29] "Sometimes"                                     
+[30] "Yes, definitely"                               
+[31] "Not applicable"                                
+[32] "&lt; 1"                                           
+[33] "&gt; 1 but ≤ 5"                                   
+[34] "&gt; 5 but ≤ 10"                                  
+[35] "&gt; 10"                                          
+[36] "Owned, no mortgage"                            
+[37] "Owned with mortgage"                           
+[38] "Rented from DHHS/Community housing agency"     
+[39] "Rented privately"                              
+[40] "Other"                                         
+[41] "Yes"                                           
+[42] "No"                                            
+[43] "Don't know"                                    
+[44] "Refused"                                       
+[45] "Every day"                                     
+[46] "A few times a week"                            
+[47] "A few times a month"                           
+[48] "Less than monthly"                             
+[49] "Less than twice a year"                        
+[50] "Never"                                         
+[51] "Ran out of money to buy food in last 12 months"</code></pre>
+</div>
+</div>
+</section>
+<section id="load-seifa-workbook" class="level1">
+<h1>Load SEIFA workbook</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>seifa_sheets <span class="ot">&lt;-</span> <span class="fu">excel_sheets</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"raw_data/seifa/Local Government Area, Indexes, SEIFA 2021.xlsx"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>seifa_sheets</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Contents"          "Table 1"           "Table 2"          
+[4] "Table 3"           "Table 4"           "Table 5"          
+[7] "Table 6"           "Explanatory Notes"</code></pre>
+</div>
+</div>
+</section>
+<section id="inspect-seifa-table-1" class="level1">
+<h1>Inspect SEIFA Table 1</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>seifa_raw <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"raw_data/seifa/Local Government Area, Indexes, SEIFA 2021.xlsx"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sheet =</span> <span class="st">"Table 1"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(seifa_raw)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 555
+Columns: 11
+$ `Australian Bureau of Statistics` &lt;chr&gt; "Socio-Economic Indexes for Australi…
+$ ...2                              &lt;chr&gt; NA, NA, NA, NA, "2021 Local Governme…
+$ ...3                              &lt;chr&gt; NA, NA, NA, "Index of Relative Socio…
+$ ...4                              &lt;chr&gt; NA, NA, NA, NA, "Decile", "5", "6", …
+$ ...5                              &lt;chr&gt; NA, NA, NA, "Index of Relative Socio…
+$ ...6                              &lt;chr&gt; NA, NA, NA, NA, "Decile", "5", "7", …
+$ ...7                              &lt;chr&gt; NA, NA, NA, "Index of Economic Resou…
+$ ...8                              &lt;chr&gt; NA, NA, NA, NA, "Decile", "4", "3", …
+$ ...9                              &lt;chr&gt; NA, NA, NA, "Index of Education and …
+$ ...10                             &lt;chr&gt; NA, NA, NA, NA, "Decile", "6", "9", …
+$ ...11                             &lt;chr&gt; NA, NA, NA, NA, "Usual Resident Popu…</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(seifa_raw)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Australian Bureau of Statistics" "...2"                           
+ [3] "...3"                            "...4"                           
+ [5] "...5"                            "...6"                           
+ [7] "...7"                            "...8"                           
+ [9] "...9"                            "...10"                          
+[11] "...11"                          </code></pre>
+</div>
+</div>
+</section>
+<section id="load-lga-boundaries" class="level1">
+<h1>Load LGA boundaries</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>lga_boundaries <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"raw_data/boundaries/LGA_2021_AUST_GDA2020_SHP/LGA_2021_AUST_GDA2020.shp"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `LGA_2021_AUST_GDA2020' from data source 
+  `/Users/smnrikhithavarma/Desktop/WCD ASSIGN4/raw_data/boundaries/LGA_2021_AUST_GDA2020_SHP/LGA_2021_AUST_GDA2020.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 566 features and 10 fields (with 19 geometries empty)
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 96.81695 ymin: -43.7405 xmax: 167.998 ymax: -9.142163
+Geodetic CRS:  GDA2020</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(lga_boundaries)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 566
+Columns: 11
+$ LGA_CODE21 &lt;chr&gt; "10050", "10180", "10250", "10300", "10470", "10500", "1055…
+$ LGA_NAME21 &lt;chr&gt; "Albury", "Armidale Regional", "Ballina", "Balranald", "Bat…
+$ STE_CODE21 &lt;chr&gt; "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",…
+$ STE_NAME21 &lt;chr&gt; "New South Wales", "New South Wales", "New South Wales", "N…
+$ AUS_CODE21 &lt;chr&gt; "AUS", "AUS", "AUS", "AUS", "AUS", "AUS", "AUS", "AUS", "AU…
+$ AUS_NAME21 &lt;chr&gt; "Australia", "Australia", "Australia", "Australia", "Austra…
+$ AREASQKM21 &lt;dbl&gt; 305.6386, 7809.4406, 484.9692, 21690.7493, 3817.8645, 50.62…
+$ LOCI_URI21 &lt;chr&gt; "http://linked.data.gov.au/dataset/asgsed3/LGA2021/10050", …
+$ SHAPE_Leng &lt;dbl&gt; 1.3217676, 6.0345827, 1.5111212, 11.4899120, 5.3951140, 0.5…
+$ SHAPE_Area &lt;dbl&gt; 0.0305604096, 0.7328247369, 0.0448434370, 2.1155280849, 0.3…
+$ geometry   &lt;MULTIPOLYGON [°]&gt; MULTIPOLYGON (((146.8657 -3..., MULTIPOLYGON (…</code></pre>
+</div>
+</div>
+</section>
+<section id="notes-from-this-version" class="level1">
+<h1>Notes from this version</h1>
+<p>In this version I checked the VPHS workbook and verified that SummaryData is the sheet best suited for analysis. The workbook contains mental health and wellbeing indicators including psychological distress and life satisfaction and socioeconomic indicators including food insecurity. I also began checking the SEIFA and LGA boundary datasets so that later versions can join the data by Local Government Area</p>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
