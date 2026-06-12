@@ -1,0 +1,62 @@
+---
+title: "assignment4.qmd"
+format: html
+editor: visual
+---
+
+## Quarto
+
+```{r}
+library(tidyverse)
+
+mental_health <- summary_data %>%
+  filter(
+    Indicator ==
+      "MENTAL HEALTH and WELLBEING - Level of psychological distress",
+    Variables ==
+      "High / very high (K10 22+)"
+  ) %>%
+  select(
+    LGA,
+    distress_pct = `%...4`
+  )
+
+food_poverty <- summary_data %>%
+  filter(
+    Indicator ==
+      "POVERTY - Ran out of money to buy food in last 12 months",
+    Variables ==
+      "Ran out of money to buy food in last 12 months"
+  ) %>%
+  select(
+    LGA,
+    poverty_pct = `%...4`
+  )
+
+analysis_data <- left_join(
+  mental_health,
+  food_poverty,
+  by = "LGA"
+)
+
+head(analysis_data)
+```
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).

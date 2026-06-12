@@ -1,0 +1,39 @@
+---
+title: "Assignment 4 Version 1: Question and Data Plan"
+author: "Rikhitha Varma"
+format: html
+editor: visual
+---
+
+## Working research question
+
+How do mental health and wellbeing outcomes vary across Victorian Local Government Areas (LGAs), and to what extent are these differences associated with socioeconomic disadvantage?
+
+## Change from early feedback submission
+
+My first feedback was about the uniformity of distribution of mental health services across Melbourne suburbs. After I began the data download process, I found it difficult to find a clean service location dataset for download. So I refined the project but still kept the same overall theme of mental health equity. The redeveloped project is examining mental health and wellbeing outcomes across Victorian LGAs using the Victorian Population Health Survey.
+
+## Planned datasets
+
+1.  Victorian Population Health Survey 2020
+    -   Source: Data Vic / Victorian Department of Health\
+    -   Purpose: Mental health and wellbeing indicators by LGA\
+    -   Licence: Creative Commons Attribution 4.0 International
+2.  SEIFA 2021 LGA Indexes
+    -   Source: Australian Bureau of Statistics\
+    -   Purpose: Socioeconomic advantage and disadvantage indicators\
+    -   Licence: ABS open data / attribution required
+3.  Local Government Area 2021 boundary file
+    -   Source: Australian Bureau of Statistics\
+    -   Purpose: Mapping Victorian LGAs\
+    -   Licence: ABS open data / attribution required
+
+## Planned analysis
+
+The first plan is to analyse high or very high psychological distress as the main mental health outcome. Socioeconomic disadvantage will be explored using food insecurity from the VPHS dataset and SEIFA from the ABS dataset. I will use tables, maps and scatterplots to compare LGAs and examine whether areas with greater disadvantage also show poorer mental health outcomes.
+
+## Notes for next version
+
+The next version will focus on checking the workbook structure, identifying the correct sheets, cleaning the selected variables, and testing whether LGA names match across VPHS, SEIFA and boundary datasets.
+
+## 
