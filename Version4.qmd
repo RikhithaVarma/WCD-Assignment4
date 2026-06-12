@@ -1,0 +1,263 @@
+---
+title: "Assignment 4 Version 4: Analysis and Visualisations"
+author: "Rikhitha Varma"
+format:
+  html:
+    toc: true
+    code-fold: true
+execute:
+  warning: false
+  message: false
+---
+
+# Purpose of this version
+
+This version develops the first analytical findings from the cleaned dataset.
+
+# Setup
+
+```{r}
+library(tidyverse)
+library(knitr)
+library(scales)
+```
+
+# Load processed data
+
+```{r}
+analysis_data <- read_csv("processed_data/analysis_data.csv")
+
+glimpse(analysis_data)
+```
+
+# Summary statistics
+
+```{r}
+analysis_data %>%
+  summarise(
+    average_distress = mean(distress_pct, na.rm = TRUE),
+    average_low_life_satisfaction = mean(life_satisfaction_pct, na.rm = TRUE),
+    average_food_insecurity = mean(food_insecurity_pct, na.rm = TRUE),
+    average_irsd = mean(irsd_score, na.rm = TRUE)
+  )
+```
+
+# LGAs with highest psychological distress
+
+```{r}
+analysis_data %>%
+  arrange(desc(distress_pct)) %>%
+  select(lga_name, distress_pct, food_insecurity_pct, irsd_score) %>%
+  slice_head(n = 10) %>%
+  kable(digits = 2)
+```
+
+# Food insecurity and psychological distress
+
+```{r}
+ggplot(analysis_data, aes(x = food_insecurity_pct, y = distress_pct)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Food insecurity and psychological distress across Victorian LGAs",
+    x = "Food insecurity (%)",
+    y = "High or very high psychological distress (%)"
+  )
+```
+
+# SEIFA disadvantage and psychological distress
+
+```{r}
+ggplot(analysis_data, aes(x = irsd_score, y = distress_pct)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "SEIFA disadvantage and psychological distress across Victorian LGAs",
+    x = "IRSD score",
+    y = "High or very high psychological distress (%)"
+  )
+```
+
+# Correlation tests
+
+```{r}
+cor.test(
+  analysis_data$food_insecurity_pct,
+  analysis_data$distress_pct
+)
+```
+
+```{r}
+cor.test(
+  analysis_data$irsd_score,
+  analysis_data$distress_pct
+)
+```
+
+# Save figures
+
+```{r}
+dir.create("figures", showWarnings = FALSE)
+
+food_plot <- ggplot(analysis_data, aes(x = food_insecurity_pct, y = distress_pct)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Food insecurity and psychological distress",
+    x = "Food insecurity (%)",
+    y = "High or very high psychological distress (%)"
+  )
+
+ggsave(
+  "figures/food_insecurity_distress.png",
+  food_plot,
+  width = 7,
+  height = 5
+)
+
+irsd_plot <- ggplot(analysis_data, aes(x = irsd_score, y = distress_pct)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "SEIFA disadvantage and psychological distress",
+    x = "IRSD score",
+    y = "High or very high psychological distress (%)"
+  )
+
+ggsave(
+  "figures/irsd_distress.png",
+  irsd_plot,
+  width = 7,
+  height = 5
+)
+```
+
+```{r}
+ggplot(
+  analysis_data,
+  aes(
+    x = life_satisfaction_pct,
+    y = distress_pct
+  )
+) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Life satisfaction and psychological distress",
+    x = "Low life satisfaction (%)",
+    y = "High psychological distress (%)"
+  )
+```
+
+```{r}
+cor.test(
+  analysis_data$life_satisfaction_pct,
+  analysis_data$distress_pct
+)
+```
+
+# Changes from Version 3
+
+## Summary of Changes
+
+Compared with Version 3, this version focused on exploratory analysis and investigation of relationships between mental health outcomes and socioeconomic factors.
+
+The following changes were made:
+
+**Data validation and inspection**
+
+-   Reloaded the processed dataset from `analysis_data.csv`.
+
+-   Verified that the final dataset contained 75 Victorian LGAs and 7 variables.
+
+-   Confirmed variable types and checked for missing values.
+
+**Descriptive statistics**
+
+-   Calculated summary statistics for:
+
+    -   Psychological distress (%)
+
+    -   Low life satisfaction (%)
+
+    -   Food insecurity (%)
+
+    -   IRSD score
+
+-   Generated overall averages to better understand statewide patterns.
+
+**Identification of high-distress LGAs**
+
+-   Ranked Victorian LGAs by psychological distress.
+
+-   Produced a table showing the ten LGAs with the highest levels of psychological distress.
+
+-   Included food insecurity and IRSD measures to provide additional context.
+
+**Exploratory visualizations**
+
+-   Created a scatterplot examining the relationship between food insecurity and psychological distress.
+
+-   Created a scatterplot examining the relationship between socioeconomic disadvantage (IRSD) and psychological distress.
+
+-   Created a scatterplot examining the relationship between low life satisfaction and psychological distress.
+
+-   Added regression trend lines to support visual interpretation.
+
+**Statistical analysis**
+
+-   Conducted Pearson correlation tests to quantify relationships between variables.
+
+-   Tested:
+
+    -   Food insecurity vs psychological distress
+
+    -   IRSD score vs psychological distress
+
+    -   Low life satisfaction vs psychological distress
+
+# Interpretation of Results
+
+## Relationship between food insecurity and psychological distress
+
+A scatterplot graph and Pearson correlation analysis were used to investigate the association between food insecurity and psychological distress. The results showed that there was virtually no correlation between the two variables (r = -0.004, p = 0.974). There was no obvious pattern in the scatter graph and the fitted line was very close to the horizontal. This suggests that, at the Victorian LGA level, areas with higher levels of food insecurity do not necessarily experience higher levels of psychological distress.
+
+One potential reason is that there are many factors affecting psychological distress, such as social support, physical illness, housing insecurity, and employment insecurity and access to services. The impact food insecurity can have on mental health can be felt at an individual level but can be masked when analysed at a local government area level. Thus, there is no apparent relationship between food insecurity and variations in psychological distress between Victorian LGAs in this dataset.
+
+------------------------------------------------------------------------
+
+## Relationship between socioeconomic disadvantage and psychological distress
+
+An Index of Relative Socio-economic Disadvantage (IRSD) was used to determine the relationship between socioeconomic disadvantage and psychological distress. A lower IRSD score means a higher level of disadvantage, a higher score means a lower level of disadvantage.
+
+The scatterplot indicated only a very weak negative correlation and the Pearson correlation analysis showed that there was no statistically significant correlation between IRSD scores and psychological distress (r = -0.061, p = 0.606). The results indicate that socioeconomic disadvantage does not explain a large proportion of the variation in psychological distress by Victorian LGAs, despite being linked to poorer health outcomes in these communities.
+
+This result could be due to the fact that mental health outcomes are complex – social, economic, environmental and personal factors all contribute to the outcome. It also points to the fact that there can be very different experiences of disadvantage within the same LGA and therefore area level disadvantage measures are not a complete picture of mental wellbeing.
+
+------------------------------------------------------------------------
+
+## Relationship between life satisfaction and psychological distress
+
+Low life satisfaction was the strongest relationship found in the analysis and was associated with psychological distress. The scatter plot had a positive relationship, with LGAs having higher proportions of residents with low life satisfaction scores having higher psychological distress scores.
+
+The Pearson correlation coefficient was significant and high (r = 0.764, p \< 0.001). This means that there is a very strong positive correlation between the two variables. The higher the level of residents' life satisfaction, the higher the percentage of psychological distress, with a higher percentage in the very high distress category.The higher the percentage of residents who report low life satisfaction, the higher the percentage who report high or very high psychological distress.
+
+This is comparable to previous mental health studies that have found that life satisfaction is an important measure of wellbeing. Stress, anxiety and other psychological distresses are more likely to occur if an individual is dissatisfied with their quality of life. The results imply that life satisfaction may be a more effective proxy for population level mental wellbeing within the community than food insecurity or socioeconomic disadvantage.
+
+------------------------------------------------------------------------
+
+## Key Findings
+
+The analysis produced three main findings:
+
+1.  There was no meaningful relationship between food insecurity and psychological distress across Victorian LGAs (r = -0.004).
+
+2.  There was no statistically significant relationship between socioeconomic disadvantage (IRSD) and psychological distress (r = -0.061).
+
+3.  Low life satisfaction showed a strong positive relationship with psychological distress (r = 0.764, p \< 0.001).
+
+Overall, the results indicate that subjective wellbeing indices (life satisfaction) seem to be more closely linked with mental health outcomes than area-level socioeconomic indicators. Adverse social factors such as disadvantage and food insecurity were also notable social factors but these didn't show up as significant predictors for psychological distress in this analysis. Rather, differences in life satisfaction between Victorian local government areas seem to be the most closely associated with mental wellbeing differences.
+
+Version 4 findings enhanced understanding of factors associated with mental wellbeing in Victorian LGAs. The analysis revealed that subjective wellbeing indicators were more explanatory than area-level measures of socioeconomic disadvantage. These results will inform the final blog post and conclusions in the next version.
+
+# 
