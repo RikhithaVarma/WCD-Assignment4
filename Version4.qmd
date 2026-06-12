@@ -156,108 +156,258 @@ cor.test(
 )
 ```
 
+```{r}
+analysis_data %>%
+  arrange(distress_pct) %>%
+  select(
+    lga_name,
+    distress_pct,
+    life_satisfaction_pct,
+    irsd_score
+  ) %>%
+  slice_head(n = 10) %>%
+  knitr::kable(digits = 2)
+```
+
+```{r}
+ggplot(
+  analysis_data,
+  aes(x = distress_pct)
+) +
+  geom_histogram(bins = 15) +
+  labs(
+    title = "Distribution of psychological distress across Victorian LGAs",
+    x = "High or very high psychological distress (%)",
+    y = "Number of LGAs"
+  )
+```
+
+```{r}
+library(sf)
+
+lga_map <- st_read(
+  "raw_data/boundaries/LGA_2021_AUST_GDA2020_SHP/LGA_2021_AUST_GDA2020.shp",
+  quiet = TRUE
+)
+
+names(lga_map)
+```
+
+```{r}
+victoria_map <- lga_map %>%
+  filter(STE_NAME21 == "Victoria")
+
+nrow(victoria_map)
+```
+
+```{r}
+unique(victoria_map$STE_NAME21)
+```
+
+```{r}
+head(victoria_map$LGA_NAME21, 20)
+```
+
+```{r}
+victoria_map_clean <- victoria_map %>%
+  mutate(
+    lga_name = LGA_NAME21,
+    lga_name = if_else(lga_name == "Bayside (Vic.)", "Bayside", lga_name)
+  )
+
+map_data <- victoria_map_clean %>%
+  left_join(
+    analysis_data,
+    by = "lga_name"
+  )
+
+map_data %>%
+  st_drop_geometry() %>%
+  summarise(
+    total_polygons = n(),
+    matched = sum(!is.na(distress_pct)),
+    unmatched = sum(is.na(distress_pct))
+  )
+```
+
+```{r}
+ggplot(map_data) +
+  geom_sf(aes(fill = distress_pct), colour = "white", linewidth = 0.1) +
+  labs(
+    title = "Psychological distress across Victorian LGAs",
+    fill = "Distress (%)"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(map_data) +
+  geom_sf(aes(fill = irsd_score), colour = "white", linewidth = 0.1) +
+  labs(
+    title = "SEIFA disadvantage across Victorian LGAs",
+    fill = "IRSD score"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+analysis_data %>%
+  arrange(desc(distress_pct)) %>%
+  select(
+    lga_name,
+    distress_pct,
+    irsd_score,
+    food_insecurity_pct
+  ) %>%
+  slice_head(n = 5) %>%
+  knitr::kable(
+    caption = "Five LGAs with the highest psychological distress"
+  )
+```
+
+```{r}
+analysis_data %>%
+  arrange(distress_pct) %>%
+  select(
+    lga_name,
+    distress_pct,
+    irsd_score,
+    food_insecurity_pct
+  ) %>%
+  slice_head(n = 5) %>%
+  knitr::kable(
+    caption = "Five LGAs with the lowest psychological distress"
+  )
+```
+
+```{r}
+metro_lgas <- c(
+  "Banyule","Bayside","Boroondara","Brimbank","Cardinia",
+  "Casey","Darebin","Frankston","Glen Eira","Greater Dandenong",
+  "Hobsons Bay","Hume","Kingston","Knox","Manningham",
+  "Maribyrnong","Maroondah","Melbourne","Melton","Monash",
+  "Moonee Valley","Moreland","Mornington Peninsula",
+  "Nillumbik","Port Phillip","Stonnington","Whitehorse",
+  "Whittlesea","Wyndham","Yarra","Yarra Ranges"
+)
+```
+
+```{r}
+analysis_data %>%
+  mutate(
+    region = ifelse(
+      lga_name %in% metro_lgas,
+      "Metropolitan",
+      "Regional"
+    )
+  ) %>%
+  group_by(region) %>%
+  summarise(
+    average_distress = mean(distress_pct, na.rm = TRUE),
+    average_food_insecurity = mean(food_insecurity_pct, na.rm = TRUE),
+    average_life_satisfaction = mean(life_satisfaction_pct, na.rm = TRUE)
+  ) %>%
+  knitr::kable(
+    digits = 2,
+    caption = "Average wellbeing indicators for metropolitan and regional LGAs"
+  )
+```
+
+# 
+
 # Changes from Version 3
 
 ## Summary of Changes
 
-Compared with Version 3, this version focused on exploratory analysis and investigation of relationships between mental health outcomes and socioeconomic factors.
+This version was compared to Version 3, which focused on exploratory analysis, statistical testing and spatial investigation of mental health and wellbeing patterns across Victorian LGAs.
 
 The following changes were made:
 
-**Data validation and inspection**
+### Data validation and inspection
 
--   Reloaded the processed dataset from `analysis_data.csv`.
+Before beginning the analysis, the processed dataset was reloaded from `analysis_data.csv` to ensure that all previous data preparation steps had been completed correctly. The dataset was checked to confirm that it contained 75 Victorian LGAs and the expected variables required for the analysis. Variable types were reviewed and missing values were identified to ensure the data was suitable for statistical analysis and visualisation. These checks helped verify that the processed dataset accurately reflected the outputs generated during the data cleaning and integration stage.
 
--   Verified that the final dataset contained 75 Victorian LGAs and 7 variables.
+### Descriptive statistics
 
--   Confirmed variable types and checked for missing values.
+To gain an initial understanding of the data, summary statistics were calculated for psychological distress, low life satisfaction, food insecurity and socioeconomic disadvantage (IRSD). Statewide averages were produced to provide a baseline for comparison across LGAs. In addition, a histogram was created to examine how psychological distress was distributed across Victoria and to identify whether some LGAs experienced substantially higher or lower distress levels than others.
 
-**Descriptive statistics**
+### Identification of LGAs with highest and lowest psychological distress
 
--   Calculated summary statistics for:
+To better understand geographic variation in mental wellbeing, Victorian LGAs were ranked according to their levels of psychological distress. Tables were produced showing the five LGAs with the highest levels of distress and the five LGAs with the lowest levels. Food insecurity and IRSD scores were included alongside these results to provide additional socioeconomic context and to explore whether highly distressed communities shared similar characteristics.
 
-    -   Psychological distress (%)
+### Exploratory visualisations
 
-    -   Low life satisfaction (%)
+A series of scatterplots were created to visually investigate potential relationships between psychological distress and other wellbeing indicators. These included food insecurity, socioeconomic disadvantage (IRSD), and low life satisfaction. Regression trend lines were added to each plot to assist interpretation and highlight any underlying patterns. A histogram was also produced to visualise the overall distribution of psychological distress across Victorian LGAs.
 
-    -   Food insecurity (%)
+### Statistical analysis
 
-    -   IRSD score
+Pearson correlation tests were conducted to quantify the relationships observed in the visualisations. Three separate relationships were examined: food insecurity and psychological distress, IRSD score and psychological distress, and low life satisfaction and psychological distress. Both the strength of the relationship and its statistical significance were assessed to determine whether any observed associations were likely to be meaningful.
 
--   Generated overall averages to better understand statewide patterns.
+### Spatial analysis
 
-**Identification of high-distress LGAs**
+To explore geographic patterns in wellbeing outcomes, Victorian LGA boundary shapefiles were loaded using the `sf` package and joined to the analysis dataset. The join process was checked to ensure that wellbeing indicators were correctly matched to their corresponding LGAs. Choropleth maps were then created to visualise the spatial distribution of psychological distress and socioeconomic disadvantage across Victoria. These maps helped identify regional patterns that may not have been apparent through tables or statistical summaries alone.
 
--   Ranked Victorian LGAs by psychological distress.
+### Metropolitan and regional comparison
 
--   Produced a table showing the ten LGAs with the highest levels of psychological distress.
+As a final analytical step, LGAs were grouped into metropolitan and regional categories. Average levels of psychological distress, food insecurity and low life satisfaction were calculated for each group. Comparing these averages provided an additional perspective on how wellbeing outcomes differ between metropolitan and regional Victoria and helped place the earlier findings into a broader geographic context.
 
--   Included food insecurity and IRSD measures to provide additional context.
+## Interpretation of Results
 
-**Exploratory visualizations**
+### Relationship between food insecurity and psychological distress
 
--   Created a scatterplot examining the relationship between food insecurity and psychological distress.
+A scatterplot and Pearson correlation analysis were used to investigate the association between food insecurity and psychological distress. It was found that there was almost no correlation between the two variables (r = -0.004, p = 0.974). No pattern was observed in a scatter plot and the fitted regression line was very nearly horizontal.
 
--   Created a scatterplot examining the relationship between socioeconomic disadvantage (IRSD) and psychological distress.
+This indicates that there are no direct links at LGA level between food insecurity and psychological distress. While the relationship between food security and social determinants of health is well acknowledged, the outcomes of food insecurity could also be more apparent at the household and/or individual level than at the aggregate LGA level analysed in this study..
 
--   Created a scatterplot examining the relationship between low life satisfaction and psychological distress.
+### Relationship between socioeconomic disadvantage and psychological distress
 
--   Added regression trend lines to support visual interpretation.
+\
+The Index of Relative Socio-economic Disadvantage (IRSD) was used to examine the relationship between socioeconomic disadvantage and psychological distress. Any negative IRSD scores suggest disadvantage, any positive scores suggest relative advantage.
 
-**Statistical analysis**
+There was only a weak negative correlation, as indicated by the scatterplot. Pearson correlation analysis was used to determine if there was statistically significant relationship between IRSD score with psychological distress (r = -0.061, p = 0.606).
 
--   Conducted Pearson correlation tests to quantify relationships between variables.
+The finding suggests that the socioeconomic disadvantage factor is not the only factor accounting for the inter-LGA scales in psychological distress in Victoria. The results indicate that mental wellbeing is related to a wider mix of economic, social and environmental determinants that are not necessarily measured at an area level.
 
--   Tested:
+### Relationship between life satisfaction and psychological distress
 
-    -   Food insecurity vs psychological distress
+The strongest relationship seen in the analysis was for low life satisfaction.
 
-    -   IRSD score vs psychological distress
+The scatter plot indicated that there was a clear positive association among LGA indicators of low life satisfaction with the indicators of psychological distress. Pearson correlation analysis revealed the high and statistically significant correlation (r = 0.764, p \< 0.001).
 
-    -   Low life satisfaction vs psychological distress
+Such a discovery indicates that subjective wellbeing measures can be a better predictor of mental health outcomes of the population than their socioeconomic status. The degree of dissatisfaction with life in the community was significantly associated with the level of psychological distress reported by residents.The community's level of dissatisfaction with life was significantly correlated with residents' levels of psychological distress.
 
-# Interpretation of Results
+### Spatial patterns in mental wellbeing
 
-## Relationship between food insecurity and psychological distress
+The spatial analysis showed significant geographical variation in psychological distress across Victoria. Distress levels over 30% were noted in several LGAs; distress levels under 10% were noted in other LGAs.
 
-A scatterplot graph and Pearson correlation analysis were used to investigate the association between food insecurity and psychological distress. The results showed that there was virtually no correlation between the two variables (r = -0.004, p = 0.974). There was no obvious pattern in the scatter graph and the fitted line was very close to the horizontal. This suggests that, at the Victorian LGA level, areas with higher levels of food insecurity do not necessarily experience higher levels of psychological distress.
+Darebin, Whittlesea, Moreland, Knox and Port Phillip had the highest levels of psychological distress. South Gippsland, Queenscliffe, Buloke, Southern Grampians and Swan Hill were the lowest.
 
-One potential reason is that there are many factors affecting psychological distress, such as social support, physical illness, housing insecurity, and employment insecurity and access to services. The impact food insecurity can have on mental health can be felt at an individual level but can be masked when analysed at a local government area level. Thus, there is no apparent relationship between food insecurity and variations in psychological distress between Victorian LGAs in this dataset.
+Interestingly, both high and low distress LGA had a wide spread of IRSD scores. There was some psychological distress in relatively high-SES LGAs and some low psychological distress in relatively low-SES LGAs. These results provide further evidence for the hypothesis that socioeconomic disadvantage is an inadequate explanation of differences in mental wellbeing outcomes.
 
-------------------------------------------------------------------------
+The maps also illustrated that important local level variations can be masked by the statewide averages, underscoring the usefulness of spatial analysis in the investigation of public health outcomes.
 
-## Relationship between socioeconomic disadvantage and psychological distress
+### Metropolitan and regional Victoria
 
-An Index of Relative Socio-economic Disadvantage (IRSD) was used to determine the relationship between socioeconomic disadvantage and psychological distress. A lower IRSD score means a higher level of disadvantage, a higher score means a lower level of disadvantage.
+There were significant differences between wellbeing outcomes between metropolitan and regional LGAs.
 
-The scatterplot indicated only a very weak negative correlation and the Pearson correlation analysis showed that there was no statistically significant correlation between IRSD scores and psychological distress (r = -0.061, p = 0.606). The results indicate that socioeconomic disadvantage does not explain a large proportion of the variation in psychological distress by Victorian LGAs, despite being linked to poorer health outcomes in these communities.
+The average psychological distress rate was found to be higher for metropolitan LGAs (23.6%) compared to regional LGAs (19.1%). Low life satisfaction was reported at higher rates in the metropolitan areas as well. The food insecurity among the two groups was fairly comparable.
 
-This result could be due to the fact that mental health outcomes are complex – social, economic, environmental and personal factors all contribute to the outcome. It also points to the fact that there can be very different experiences of disadvantage within the same LGA and therefore area level disadvantage measures are not a complete picture of mental wellbeing.
-
-------------------------------------------------------------------------
-
-## Relationship between life satisfaction and psychological distress
-
-Low life satisfaction was the strongest relationship found in the analysis and was associated with psychological distress. The scatter plot had a positive relationship, with LGAs having higher proportions of residents with low life satisfaction scores having higher psychological distress scores.
-
-The Pearson correlation coefficient was significant and high (r = 0.764, p \< 0.001). This means that there is a very strong positive correlation between the two variables. The higher the level of residents' life satisfaction, the higher the percentage of psychological distress, with a higher percentage in the very high distress category.The higher the percentage of residents who report low life satisfaction, the higher the percentage who report high or very high psychological distress.
-
-This is comparable to previous mental health studies that have found that life satisfaction is an important measure of wellbeing. Stress, anxiety and other psychological distresses are more likely to occur if an individual is dissatisfied with their quality of life. The results imply that life satisfaction may be a more effective proxy for population level mental wellbeing within the community than food insecurity or socioeconomic disadvantage.
-
-------------------------------------------------------------------------
+The findings indicate that psychological distress is more likely to be occurring in metropolitan Victoria despite the overall high levels of access to services and economic opportunities. Other factors like housing affordability stress, population density, social isolation, cost of living stress may all play a role in these differences.
 
 ## Key Findings
 
-The analysis produced three main findings:
+The analysis produced five key findings:
 
-1.  There was no meaningful relationship between food insecurity and psychological distress across Victorian LGAs (r = -0.004).
+1.  Psychological distress varies substantially across Victorian LGAs, ranging from less than 10% to more than 30%.
 
-2.  There was no statistically significant relationship between socioeconomic disadvantage (IRSD) and psychological distress (r = -0.061).
+2.  There was no meaningful relationship between food insecurity and psychological distress across Victorian LGAs (r = -0.004).
 
-3.  Low life satisfaction showed a strong positive relationship with psychological distress (r = 0.764, p \< 0.001).
+3.  There was no statistically significant relationship between socioeconomic disadvantage (IRSD) and psychological distress (r = -0.061).
 
-Overall, the results indicate that subjective wellbeing indices (life satisfaction) seem to be more closely linked with mental health outcomes than area-level socioeconomic indicators. Adverse social factors such as disadvantage and food insecurity were also notable social factors but these didn't show up as significant predictors for psychological distress in this analysis. Rather, differences in life satisfaction between Victorian local government areas seem to be the most closely associated with mental wellbeing differences.
+4.  Low life satisfaction showed a strong positive relationship with psychological distress (r = 0.764, p \< 0.001).
 
-Version 4 findings enhanced understanding of factors associated with mental wellbeing in Victorian LGAs. The analysis revealed that subjective wellbeing indicators were more explanatory than area-level measures of socioeconomic disadvantage. These results will inform the final blog post and conclusions in the next version.
+5.  Metropolitan LGAs reported higher average levels of psychological distress than regional LGAs.
 
-# 
+Overall, the results suggest that subjective wellbeing measures, especially life satisfaction, are more closely associated with psychological distress than area-level measures of socioeconomic disadvantage or food insecurity. Results also point to considerable geographical variation in mental wellbeing outcomes across Victoria, and to the importance of local level analysis in the investigation of population health patterns.
+
+Version 4 greatly improved the analytical aspect of the project with descriptive statistics, correlation testing, spatial visualisation and comparisons between metropolitan and regional areas. These results will be used directly to inform the final blog post and conclusions presented in the final submission.
