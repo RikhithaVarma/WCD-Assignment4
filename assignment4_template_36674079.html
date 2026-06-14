@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>assignment4_template_36674079</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="assignment4_template_36674079_files/libs/clipboard/clipboard.min.js"></script>
+<script src="assignment4_template_36674079_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="assignment4_template_36674079_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="assignment4_template_36674079_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="assignment4_template_36674079_files/libs/quarto-html/popper.min.js"></script>
+<script src="assignment4_template_36674079_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="assignment4_template_36674079_files/libs/quarto-html/anchor.min.js"></script>
+<link href="assignment4_template_36674079_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="assignment4_template_36674079_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="assignment4_template_36674079_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="assignment4_template_36674079_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="assignment4_template_36674079_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<pre><code>---
+title: "What Explains Psychological Distress Across Victorian Communities?"
+subtitle: "Assignment 4 ETC5512"
+author: "Rikhitha Varma"
+format: html
+editor: visual
+---</code></pre>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Data and Documenting</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Sub-questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Are the Datasets Suitale? What are the Data Limitations and Ethical Considerations?</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Data Download and Processing</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false" href="">Metadata and Supporting Files</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false" href="">Blog post</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-7" role="tab" aria-controls="tabset-1-7" aria-selected="false" href="">Behind the Scenes</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><strong>Research Question:-</strong></p>
+<p><strong>Main Reseach Question</strong></p>
+<p>How do mental health and wellbeing outcomes vary across Victorian local government areas, and what is the relationship between socioeconomic disadvantage and mental wellbeing?</p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><strong>Sub-questions</strong>:-</p>
+<ol type="1">
+<li><p>Which Victorian LGAs report the highest and lowest levels of psychological distress?</p></li>
+<li><p>Is psychological distress associated with socioeconomic disadvantage as measured by the Index of Relative Socioeconomic Disadvantage (IRSD)?</p></li>
+<li><p>Is psychological distress associated with food insecurity?</p></li>
+<li><p>Is psychological distress associated with low life satisfaction?</p></li>
+</ol>
+<p><strong>Why I Chose This Question?</strong></p>
+<p>Over the last few years mental health and mental wellbeing are emerging as serious issues in public health in Australia. There is a national or state level discussion of mental health outcomes, but there may be significant variations at the local community level. Knowing where the highest levels of psychological distress are and what factors are linked to a poorer state of wellbeing can help to inform community level health issues. I selected this topic in particular, because of the public health aspect of the topic, the social disadvantage component, the use of geographic analysis, and because of the ability to use several datasets and analytical techniques learned in the unit.</p>
+<p><strong>Data Sorces</strong></p>
+<p>Three datasets were used in this analysis.</p>
+<p><strong>Victorian Population Health Survey (VPHS) 2020</strong></p>
+<p>Source: Victorian Agency for Health Information (VAHI)</p>
+<p>Purpose:<br>
+This dataset provides estimates of health and wellbeing indicators for Victorian local government areas. It was the primary source used to obtain measures of:</p>
+<ul>
+<li><p>High or very high psychological distress</p></li>
+<li><p>Low life satisfaction</p></li>
+<li><p>Food insecurity</p></li>
+</ul>
+<p>Data Type:<br>
+Survey sample data.</p>
+<p>Licence:<br>
+Publicly available government data provided through the Victorian Agency for Health Information.</p>
+<p>Limitations:</p>
+<ul>
+<li><p>Survey based estimates are subject to sampling error.</p></li>
+<li><p>Results are at LGA level and may not be representative of individual experiences.</p></li>
+<li><p>The information provided is for the year 2020 and may not be indicative of present circumstances.</p></li>
+</ul>
+<p>Ethical Considerations:<br>
+The data set is anonymous and has been compiled. So, privacy concerns are low.</p>
+<p><strong>SEIFA 2021 - Index of Relative Socioeconomic Disadvantage (IRSD)</strong></p>
+<p>Source: Australian Bureau of Statistics (ABS)</p>
+<p>Purpose:<br>
+Used to measure socioeconomic disadvantage for each Victorian local government area.</p>
+<p>Data Type:<br>
+Administrative and census derived index.</p>
+<p>Licence:<br>
+Australian Bureau of Statistics open government data.</p>
+<p>Limitations:</p>
+<ul>
+<li><p>IRSD does not measure individual situations, but rather relative disadvantage.</p></li>
+<li><p>There can be a significant variation between the communities that exists and is not represented by an area-level score.</p></li>
+</ul>
+<p>Ethical Considerations:<br>
+Communities can have significant diversity that is not represented by one area-level score.</p>
+<p><strong>ABS Local Government Area Boundries (2021)</strong></p>
+<p>Source: Australian Bureau of Statistics</p>
+<p>Purpose:<br>
+Used to create spatial visualisations of wellbeing indicators across Victoria.</p>
+<p>Data Type:<br>
+Geospatial boundary data.</p>
+<p>Licence:<br>
+Australian Bureau of Statistics open government data.</p>
+<p>Limitations:<br>
+Boundary data does not include wellbeing information.</p>
+<p>Ethical Considerations:<br>
+No personal information is included.</p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p><strong>Why These Datasets Are Suitable?</strong></p>
+<p>All the data sets are complementary and together give a robust answer to the research question. Direct measures of mental health and wellbeing outcomes, such as psychological distress, life satisfaction and food insecurity, are taken from the Victorian Population Health Survey (VPHS). The SEIFA dataset is a commonly used measure of socioeconomic disadvantage, enabling wellbeing outcomes to be considered in a wider socio-economic context. Lastly, boundary information for the ABS Local Government Area (LGA) facilitates geographic information integration and facilitates spatial analysis by mapping.</p>
+<p>These data sets can be aggregated to answer the research question from different angles. The health outcomes of interest are included on the VPHS data, the SEIFA data includes potential explanatory factors and the boundary data allows for geographic variation to be visualised across Victoria. These datasets can inform descriptive, statistical and spatial analyses of mental wellbeing, as well as informing practice.</p>
+<p><strong>Data Limitations</strong></p>
+<p>The results should be considered in the light of the following limitations. First, the VPHS data are survey data and, as such, are subject to sampling variability and reporting bias. Secondly, the analysis is conducted using data from different years (VPHS 2020 and SEIFA 2021), which may not necessarily be representative of exactly the same period. Third, the analysis is carried out at the Local Government Area level; results are for communities not for individuals. Any relationships found at the LGA level, therefore, should not be interpreted as representing relationships at the individual level (ecological fallacy). Lastly, the mental wellbeing of residents can be affected by numerous things that were not the focus of this project, such as housing affordability, employment status, physical health, social connections and access to health and social care services.</p>
+<p><strong>Ethical Considerations</strong></p>
+<p>The data sets used in this project are all government datasets that are publicly available and are only aggregated at Local Government Area level. No personal data was taken, stored or analysed. Therefore, there are very little privacy concerns. The analysis was done for educational purposes only and the results are presented on an aggregate basis so as to avoid the possibility of identifying individuals and/or households.</p>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p><strong>Data Download</strong></p>
+<p>The datasets were downloaded directly from official government sources:</p>
+<ol type="1">
+<li><p>Victorian Population Health Survey 2020 dashboard workbook.</p></li>
+<li><p>ABS SEIFA 2021 Local Government Area indexes.</p></li>
+<li><p>ABS 2021 Local Government Area boundary shapefiles.</p></li>
+</ol>
+<p>All raw files were stored in the raw_data directory and retained without modification.</p>
+<p><strong>Data Processing Steps</strong></p>
+<ol type="1">
+<li><p>Loaded the VPHS SummaryData sheet.</p></li>
+<li><p>Selected indicators related to:</p>
+<ul>
+<li><p>Psychological distress</p></li>
+<li><p>Life satisfaction</p></li>
+<li><p>Food insecurity</p></li>
+</ul></li>
+<li><p>Filtered records to Victorian LGAs only.</p></li>
+<li><p>Extracted percentages for the selected wellbeing indicators.</p></li>
+<li><p>Loaded the SEIFA 2021 dataset and extracted IRSD scores.</p></li>
+<li><p>Cleaned and standardised LGA names across datasets.</p></li>
+<li><p>Joined VPHS and SEIFA data using LGA names.</p></li>
+<li><p>Created a final analysis dataset containing:</p>
+<ul>
+<li><p>LGA name</p></li>
+<li><p>Psychological distress</p></li>
+<li><p>Low life satisfaction</p></li>
+<li><p>Food insecurity</p></li>
+<li><p>IRSD score</p></li>
+</ul></li>
+<li><p>Saved the processed dataset as analysis_data.csv.</p></li>
+<li><p>Joined the processed dataset to ABS boundary files for mapping.</p></li>
+</ol>
+<p><strong>Data Dictionary</strong></p>
+<p>The final dataset contains the following variables:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>lga_name</td>
+<td>Victorian Local Government Area name</td>
+</tr>
+<tr class="even">
+<td>distress_pct</td>
+<td>Percentage reporting high or very high psychological distress</td>
+</tr>
+<tr class="odd">
+<td>life_satisfaction_pct</td>
+<td>Percentage reporting low life satisfaction</td>
+</tr>
+<tr class="even">
+<td>food_insecurity_pct</td>
+<td>Percentage reporting food insecurity</td>
+</tr>
+<tr class="odd">
+<td>irsd_score</td>
+<td>ABS Index of Relative Socioeconomic Disadvantage score</td>
+</tr>
+<tr class="even">
+<td>geometry</td>
+<td>Spatial boundary information used for mapping</td>
+</tr>
+</tbody>
+</table>
+<section id="section" class="level1">
+<h1></h1>
+</section>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<p>The project repository contains additional files that support reproducibility and transparency:</p>
+<ul>
+<li><p>Raw VPHS 2020 dataset.</p></li>
+<li><p>Raw SEIFA 2021 dataset.</p></li>
+<li><p>ABS LGA boundary shapefiles.</p></li>
+<li><p>Processed analysis dataset (analysis_data.csv).</p></li>
+<li><p>Version 1–4 development files showing the iterative analysis process.</p></li>
+<li><p>Git commit history documenting project progression.</p></li>
+<li><p>Quarto source files used to generate all outputs and visualisations.</p></li>
+</ul>
+<!-- Task 2 Tab: Writing your blogpost -->
+</div>
+<div id="tabset-1-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-6-tab">
+<p><strong>What Explains Psychological Distress Across Victorian Communities? Exploring Wellbeing, Disadvantage and Geography</strong></p>
+<section id="motivation" class="level1">
+<h1>Motivation</h1>
+<p>Data for analysis are from the Victorian Population Health Survey (VPHS) 2020, Australian Bureau of Statistics (ABS) Socio-Economic Indexes for Areas (SEIFA) 2021 dataset and ABS Local Government Area boundary files.</p>
+<p>The VPHS data contains measures of psychological distress, life satisfaction and food insecurity by LGA in Victoria. These indicators have been chosen for being significant aspects of mental wellbeing and social conditions.</p>
+<p>The SEIFA data provides the Index of Relative Socio-economic Disadvantage (IRSD) which is widely used to indicate the relative level of disadvantage in Australian communities. Maps were made of the distribution of wellbeing indicators using ABS boundary files.</p>
+<p>The final analysis dataset included 75 Victorian Local Governments Areas (LGAs) for psychological distress, life satisfaction, food insecurity and socioeconomic disadvantage information.</p>
+</section>
+<section id="data" class="level1">
+<h1>Data</h1>
+<p>Data for the analysis was supplied by the Victorian Population Health Survey (VPHS) 2020; the Australian Bureau of Statistics (ABS) Socio-Economic Indexes for Areas (SEIFA) 2021 dataset and the ABS Local Government Area boundary files.</p>
+<p>The VPHS dataset includes indicators of psychological distress, life satisfaction and food insecurity at the local level (LGAs) in Victoria. They were chosen as indicators because they are important aspects of mental wellbeing and social conditions.</p>
+<p>The SEIFA dataset supplies the Index of Relative Socio-economic Disadvantage (IRSD) which is often used to indicate the relative level of disadvantage in Australian communities. Maps were developed using ABS boundary files which were used to map the geographic distribution of wellbeing indicators.</p>
+<p>Following data cleaning and integration the final analysis dataset consisted of 75 Victorian LGAs with data on psychological distress, life satisfaction, food insecurity and socioeconomic factors.</p>
+</section>
+<section id="analysis" class="level1">
+<h1>Analysis</h1>
+<p><strong>How does psychological distress vary across Victoria?</strong></p>
+<p>The first aim of this analysis was to explore the differences between Victorian communities in their levels of psychological distress. The results reveal substantial differences between local government areas. Psychological distress rates of less than 10% were reported by some LGA, while others reported rates of more than 30%.</p>
+<p>Distribution of psychological distress shows unequal experience across Victoria for mental wellbeing. A number of LGAs had significantly higher levels of distress than the state average, indicating that there may be local factors affecting wellbeing outcomes. The histogram and geographic visualisation demonstrate that there is not a statewide level of distress, but rather unevenly spread, which reinforces the need to look at wellbeing at the community level, not statewide averages.</p>
+<p>Darebin, Whittlesea, Moreland, Knox and Port Phillip had the highest levels of psychological distress. The lowest level of distress was in South Gippsland, Queenscliffe, Buloke, Southern Grampians and Swan Hill. These differences suggest there is significant variation in mental wellbeing outcomes between Victorian communities.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment4_template_36674079_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Five LGAs with the highest psychological distress</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">lga_name</th>
+<th style="text-align: right;">distress_pct</th>
+<th style="text-align: right;">food_insecurity_pct</th>
+<th style="text-align: right;">irsd_score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Darebin</td>
+<td style="text-align: right;">30.90</td>
+<td style="text-align: right;">4.51</td>
+<td style="text-align: right;">1018</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Whittlesea</td>
+<td style="text-align: right;">30.60</td>
+<td style="text-align: right;">10.01</td>
+<td style="text-align: right;">990</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Moreland</td>
+<td style="text-align: right;">28.84</td>
+<td style="text-align: right;">5.18</td>
+<td style="text-align: right;">1027</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Knox</td>
+<td style="text-align: right;">27.49</td>
+<td style="text-align: right;">5.61</td>
+<td style="text-align: right;">1042</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Port Phillip</td>
+<td style="text-align: right;">27.38</td>
+<td style="text-align: right;">7.70</td>
+<td style="text-align: right;">1061</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Five LGAs with the lowest psychological distress</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">lga_name</th>
+<th style="text-align: right;">distress_pct</th>
+<th style="text-align: right;">irsd_score</th>
+<th style="text-align: right;">food_insecurity_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">South Gippsland</td>
+<td style="text-align: right;">8.91</td>
+<td style="text-align: right;">1003</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Queenscliffe</td>
+<td style="text-align: right;">9.71</td>
+<td style="text-align: right;">1082</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Buloke</td>
+<td style="text-align: right;">12.08</td>
+<td style="text-align: right;">975</td>
+<td style="text-align: right;">10.97</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Southern Grampians</td>
+<td style="text-align: right;">12.80</td>
+<td style="text-align: right;">994</td>
+<td style="text-align: right;">4.81</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Swan Hill</td>
+<td style="text-align: right;">14.03</td>
+<td style="text-align: right;">941</td>
+<td style="text-align: right;">7.95</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment4_template_36674079_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Is life satisfaction associated with psychological distress?</strong></p>
+<p>The strongest associations found in this analysis were between low life satisfaction and psychological distress. There was a clear positive association between low life satisfaction and psychological distress within the scatterplot, with higher levels of low life satisfaction in the LGAs corresponding to higher levels of psychological distress.</p>
+<p>A high and significant positive correlation was found (r = 0.764, p &lt; 0.001) by Pearson correlation analysis. This suggests that there is a negative association between life satisfaction and psychological distress in communities with low life satisfaction scores.</p>
+<p>This is in line with other wellbeing research that tends to look at life satisfaction as a key indicator of mental health. The analysis can’t confirm causation, but the relationship is strong and subjective wellbeing could be used to shed light on mental wellbeing outcomes in Victorian communities.</p>
+<ul>
+<li><p>Life satisfaction vs psychological distress scatterplot</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment4_template_36674079_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div></li>
+</ul>
+<p><strong>Is socioeconomic disadvantage associated with psychological distress?</strong></p>
+<p>The Australian Bureau of Statistics (ABS) Index of Relative Socio-economic Disadvantage (IRSD) was used to describe socioeconomic disadvantage. A lower IRSD score reflects more disadvantages; a higher score reflects relative advantages.</p>
+<p>However, and somewhat surprisingly, few relationships were found between socioeconomic disadvantage and psychological distress. Using Pearson correlation analysis, the correlation coefficient was calculated to be -0.061, with little association between the two variables.</p>
+<p>This is supported by the geographic maps. There were also a number of relatively advantaged LGAs where distress was high, and some less advantaged LGAs where distress was comparatively low. Socio-economic disadvantage alone does not account for the differences in psychological distress experienced in communities across Victoria, these results indicate.</p>
+<p>Factors affecting mental wellbeing are multiply determined; social, economic, environmental and personal. Therefore, measures of disadvantage at the area level may only reflect a portion of the overall disadvantage.</p>
+<ul>
+<li><p>IRSD vs psychological distress scatterplot</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment4_template_36674079_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>IRSD map</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment4_template_36674079_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div></li>
+</ul>
+<p><strong>Is food insecurity associated with psychological distress?</strong></p>
+<p>An extra measure of social disadvantage, food insecurity, was added. Communities with higher levels of food insecurity might also be associated with worse mental wellbeing outcomes.</p>
+<p>But the findings indicated little correlation between food insecurity and psychological distress. The Pearson correlation coefficient was essentially zero (r = -0.004) and the correlation was not statistically significant.</p>
+<p>This may be because food insecurity could be a more personal and/or household issue than one at a LGA level as analysed. Food insecurity, although a significant social issue, was not thought to be a factor in the variation in psychological distress that was seen across Victorian LGAs in this dataset.</p>
+<ul>
+<li><p>Food insecurity vs psychological distress scatterplot</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment4_template_36674079_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div></li>
+</ul>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>This analysis explored differences in mental health and wellbeing outcomes between Victorian local government areas, and the relationship with socioeconomic disadvantage, food insecurity and life satisfaction.</p>
+<p>There was significant community to community variation in psychological distress that was revealed in the results. There were also significant local differences, with some LGAs having levels below 10% and some above 30%, indicating distress levels which were not captured in the statewide averages.</p>
+<p>The lowest level of life satisfaction was most strongly associated with psychological distress among the factors studied. The incidence of psychological distress was also higher in communities with higher Low Life Satisfaction scores. Conversely, there were no significant socioeconomic disadvantage or food insecurity links with psychological distress at the LGA level.</p>
+<p>The results indicate that subjective wellbeing measures can contribute a greater understanding of community mental health outcomes than can area-level socioeconomic measures. The analysis also emphasizes the importance of using both statistical and spatial methods in the research of public health issues. The results are not considered to be causal relationships but they do offer a good amount of evidence that mental wellbeing is significantly different between Victorian communities and is affected by a range of factors that are wider than the traditional determinants of disadvantage.</p>
+<p><strong>Refrences</strong></p>
+<p>Australian Bureau of Statistics. (2023). “<em>Local Government Area Boundaries, Australia, 2021”</em>.Australian Bureau of Statistics. Retrieved from <a href="https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files" class="uri">https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files</a></p>
+<p>Australian Bureau of Statistics. (2023). <em>Socio-Economic Indexes for Areas (SEIFA), 2021</em>. Australian Bureau of Statistics. Retrieved from <a href="https://www.abs.gov.au/statistics/people/people-and-communities/socio-economic-indexes-areas-seifa-australia/latest-release" class="uri">https://www.abs.gov.au/statistics/people/people-and-communities/socio-economic-indexes-areas-seifa-australia/latest-release</a></p>
+<p>Victorian Agency for Health Information. (2023). <em>Victorian Population Health Survey 2020 Dashboard</em>. Victorian Government. Retrieved from <a href="https://www.vahi.vic.gov.au/victorian-population-health-survey" class="uri">https://www.vahi.vic.gov.au/victorian-population-health-survey</a></p>
+<p><strong>Data Files Used</strong></p>
+<ul>
+<li><p>Victorian Population Health Survey 2020 Dashboard Workbook (<code>2020 VPHS Dashboard_FINAL.xlsm</code>)</p></li>
+<li><p>SEIFA 2021 Local Government Area Indexes Workbook (Local Government Area, Indexes, SEIFA 2021.xlsx)</p></li>
+<li><p>ABS 2021 Local Government Area Boundary Shapefile (LGA_2021_AUST_GDA2020_SHP)</p></li>
+</ul>
+<!-- Task 3 Tab: Behind the Scenes -  -->
+</section>
+</section>
+</div>
+<div id="tabset-1-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-7-tab">
+<p><strong>1. What parts of your data processing or analysis were not “sexy”?</strong></p>
+<p>Much of the effort in this project was in data cleaning and preparation, and not so much in the analysis. Many of the indicators in the Victorian Population Health Survey workbook were not directly relevant to my research question, so took a lot of time to identify which indicators could measure mental wellbeing and socioeconomic factors. The SEIFA dataset also needed to be cleaned as useful information was not available in a tidy format and a number of header rows needed to be discarded before it could be analysed.</p>
+<p>One of the other time consuming activities was ensuring that the names of the LGA correspondences were consistent between the datasets. There was a problem matching up names on the tables, due to minor deviations in their names, which had to be resolved. It was necessary to make repeated checks of the joins, validate values and ensure that variables were coded as numeric data in order to create the final analysis data set.</p>
+<p>These tasks were not really apparent in the final blog post, but were important to getting reliable results. The use of R packages like tidyverse, readxl and sf facilitated a lot of automation in the cleaning process and reduced the number of manual edits needed</p>
+<p><strong>2. What challenges did you face during the analysis?</strong></p>
+<p>One difficulty was determining what to measure mental wellbeing with the data that was available in the surveys. Many indicators are present in the Victorian Population Health Survey, and when choosing variables that were meaningful and appropriate for analysis, the variables had to be explored carefully. At first, I thought there would be high and strong relationships between socioeconomic disadvantage and food insecurity with psychological distress, but there were rather low and weak relationships.</p>
+<p>The second difficulty was bringing together a number of data sets from various sources. Data integration was more challenging than anticipated because of the different formats and structure of the data in the VPHS, SEIFA and boundary files. Another learning curve for me was working with spatial data with the sf package. Spatial joins and geographic data structures were new concepts that had to be learned for creating choropleth maps.</p>
+<p>I really liked one aspect that was working to be able to merge the health, socioeconomic and spatial data into a single reproducible workflow. This enabled me to investigate the research question from several different analytical angles and not just one that was based on statistics.</p>
+<p><strong>3. What are the limitations of your work and how could it be improved?</strong></p>
+<p>The interpretation of the results had several limitations. First, the analysis was done at the Local Government Area (LGA) level, this means that relationships found among variables are not between individuals but between communities. The results are thus not considered to be indicative of individual-level behaviour or outcomes.</p>
+<p>Second, there are only a few wellbeing indicators that could be included in the project, because of time and scope constraints. The factors that influence mental health are numerous and varied, such as housing affordability, employment, physical health, social support or access to health care services, not addressed in this analysis.</p>
+<p>Thirdly, the data were gathered at different years, with VPHS data showing conditions in 2020 and SEIFA data showing conditions in 2021. The difference is small but might affect the strength of some observed relationships.</p>
+<p>In subsequent development of this project, I would include more indicators and explore the changes over time instead of cross-sectional analysis. I would also look at smaller geographic areas, such as SA2 regions, to uncover more localised trends and patterns in mental wellbeing.</p>
+<p><strong>4. How did you use AI during this assignmnet?</strong></p>
+<p>The project incorporated the use of AI for learning and support. It helped in grasping new R functions, debugging code, optimizing data manipulation steps, and enhancing the readability of written documentation. AI proved to be a valuable asset in scenarios involving spatial data and determining strategies for data integration across various sources.</p>
+<p>But AI-generated content did not get accepted without verification. All recommended code was first modified and run in R and output was verified against the data to confirm that outputs were accurate and meaningful. In some instances, the proposed ideas from AI needed tweaking due to structural differences between the data being analyzed and the AI’s suggestions.</p>
+<p>The most helpful part of the AI was aiding me in comprehending new techniques and concepts, especially in the area of data wrangling and spatial analysis.</p>
+<p><strong>5. Reflection on the iterative process and GitHub versions</strong></p>
+<p>The project developed substantially through multiple iterations recorded within the GitHub repository.</p>
+<p><strong>Version 1</strong> focused on refining the research question, identifying the appropriate data sets and developing the overall strategy for analysis.</p>
+<p><strong>Version 2</strong> involved in loading and inspection of the datasets. In this stage I reviewed available indicators, assessed data quality and identified variables relevant to mental wellbeing and socioeconomic disadvantage.</p>
+<p><strong>Version 3</strong> focused on data cleaning, transformation and integration. The VPHS, SEIFA and boundary datasets were processed and combined into a single analysis dataset suitable for statistical analysis and mapping.</p>
+<p><strong>Version 4</strong> expanded the analysis through descriptive statistics, correlation testing, visualisations and spatial mapping. Additional analyses comparing metropolitan and regional LGAs were also introduced.</p>
+<p>The final project was much more expansive than my original checklist submission. The analysis moved from a simple consideration of disadvantage and mental wellbeing to a more detailed one including statistical, socioeconomic and spatial points of view. These improvements are openly recorded in the GitHub commit history and show the iterative refinement and continuous testing that happened through the project’s lifetime.</p>
+</div>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

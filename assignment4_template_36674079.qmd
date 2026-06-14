@@ -1,0 +1,523 @@
+```         
+---
+title: "What Explains Psychological Distress Across Victorian Communities?"
+subtitle: "Assignment 4 ETC5512"
+author: "Rikhitha Varma"
+format: html
+editor: visual
+---
+```
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(sf)
+library(knitr)
+
+analysis_data <- read_csv("processed_data/analysis_data.csv")
+
+lga_map <- st_read(
+  "raw_data/boundaries/LGA_2021_AUST_GDA2020_SHP/LGA_2021_AUST_GDA2020.shp",
+  quiet = TRUE
+)
+
+victoria_map <- lga_map %>%
+  filter(STE_NAME21 == "Victoria")
+
+victoria_map_clean <- victoria_map %>%
+  mutate(
+    lga_name = LGA_NAME21,
+    lga_name = if_else(
+      lga_name == "Bayside (Vic.)",
+      "Bayside",
+      lga_name
+    )
+  )
+
+map_data <- victoria_map_clean %>%
+  left_join(
+    analysis_data,
+    by = "lga_name"
+  )
+```
+
+::: panel-tabset
+<!-- Task 1 Tab: Data and Documenting -->
+
+## Data and Documenting
+
+**Research Question:-**
+
+**Main Reseach Question**
+
+How do mental health and wellbeing outcomes vary across Victorian local government areas, and what is the relationship between socioeconomic disadvantage and mental wellbeing?
+
+## Sub-questions
+
+**Sub-questions**:-
+
+1.  Which Victorian LGAs report the highest and lowest levels of psychological distress?
+
+2.  Is psychological distress associated with socioeconomic disadvantage as measured by the Index of Relative Socioeconomic Disadvantage (IRSD)?
+
+3.  Is psychological distress associated with food insecurity?
+
+4.  Is psychological distress associated with low life satisfaction?
+
+**Why I Chose This Question?**
+
+Over the last few years mental health and mental wellbeing are emerging as serious issues in public health in Australia. There is a national or state level discussion of mental health outcomes, but there may be significant variations at the local community level. Knowing where the highest levels of psychological distress are and what factors are linked to a poorer state of wellbeing can help to inform community level health issues. I selected this topic in particular, because of the public health aspect of the topic, the social disadvantage component, the use of geographic analysis, and because of the ability to use several datasets and analytical techniques learned in the unit.
+
+**Data Sorces**
+
+Three datasets were used in this analysis.
+
+**Victorian Population Health Survey (VPHS) 2020**
+
+Source: Victorian Agency for Health Information (VAHI)
+
+Purpose:\
+This dataset provides estimates of health and wellbeing indicators for Victorian local government areas. It was the primary source used to obtain measures of:
+
+-   High or very high psychological distress
+
+-   Low life satisfaction
+
+-   Food insecurity
+
+Data Type:\
+Survey sample data.
+
+Licence:\
+Publicly available government data provided through the Victorian Agency for Health Information.
+
+Limitations:
+
+-   Survey based estimates are subject to sampling error.
+
+-   Results are at LGA level and may not be representative of individual experiences.
+
+-   The information provided is for the year 2020 and may not be indicative of present circumstances.
+
+Ethical Considerations:\
+The data set is anonymous and has been compiled. So, privacy concerns are low.
+
+**SEIFA 2021 - Index of Relative Socioeconomic Disadvantage (IRSD)**
+
+Source: Australian Bureau of Statistics (ABS)
+
+Purpose:\
+Used to measure socioeconomic disadvantage for each Victorian local government area.
+
+Data Type:\
+Administrative and census derived index.
+
+Licence:\
+Australian Bureau of Statistics open government data.
+
+Limitations:
+
+-   IRSD does not measure individual situations, but rather relative disadvantage.
+
+-   There can be a significant variation between the communities that exists and is not represented by an area-level score.
+
+Ethical Considerations:\
+Communities can have significant diversity that is not represented by one area-level score.
+
+**ABS Local Government Area Boundries (2021)**
+
+Source: Australian Bureau of Statistics
+
+Purpose:\
+Used to create spatial visualisations of wellbeing indicators across Victoria.
+
+Data Type:\
+Geospatial boundary data.
+
+Licence:\
+Australian Bureau of Statistics open government data.
+
+Limitations:\
+Boundary data does not include wellbeing information.
+
+Ethical Considerations:\
+No personal information is included.
+
+## Are the Datasets Suitale? What are the Data Limitations and Ethical Considerations?
+
+**Why These Datasets Are Suitable?**
+
+All the data sets are complementary and together give a robust answer to the research question. Direct measures of mental health and wellbeing outcomes, such as psychological distress, life satisfaction and food insecurity, are taken from the Victorian Population Health Survey (VPHS). The SEIFA dataset is a commonly used measure of socioeconomic disadvantage, enabling wellbeing outcomes to be considered in a wider socio-economic context. Lastly, boundary information for the ABS Local Government Area (LGA) facilitates geographic information integration and facilitates spatial analysis by mapping.
+
+These data sets can be aggregated to answer the research question from different angles. The health outcomes of interest are included on the VPHS data, the SEIFA data includes potential explanatory factors and the boundary data allows for geographic variation to be visualised across Victoria. These datasets can inform descriptive, statistical and spatial analyses of mental wellbeing, as well as informing practice.
+
+**Data Limitations**
+
+The results should be considered in the light of the following limitations. First, the VPHS data are survey data and, as such, are subject to sampling variability and reporting bias. Secondly, the analysis is conducted using data from different years (VPHS 2020 and SEIFA 2021), which may not necessarily be representative of exactly the same period. Third, the analysis is carried out at the Local Government Area level; results are for communities not for individuals. Any relationships found at the LGA level, therefore, should not be interpreted as representing relationships at the individual level (ecological fallacy). Lastly, the mental wellbeing of residents can be affected by numerous things that were not the focus of this project, such as housing affordability, employment status, physical health, social connections and access to health and social care services.
+
+**Ethical Considerations**
+
+The data sets used in this project are all government datasets that are publicly available and are only aggregated at Local Government Area level. No personal data was taken, stored or analysed. Therefore, there are very little privacy concerns. The analysis was done for educational purposes only and the results are presented on an aggregate basis so as to avoid the possibility of identifying individuals and/or households.
+
+## Data Download and Processing
+
+**Data Download**
+
+The datasets were downloaded directly from official government sources:
+
+1.  Victorian Population Health Survey 2020 dashboard workbook.
+
+2.  ABS SEIFA 2021 Local Government Area indexes.
+
+3.  ABS 2021 Local Government Area boundary shapefiles.
+
+All raw files were stored in the raw_data directory and retained without modification.
+
+**Data Processing Steps**
+
+1.  Loaded the VPHS SummaryData sheet.
+
+2.  Selected indicators related to:
+
+    -   Psychological distress
+
+    -   Life satisfaction
+
+    -   Food insecurity
+
+3.  Filtered records to Victorian LGAs only.
+
+4.  Extracted percentages for the selected wellbeing indicators.
+
+5.  Loaded the SEIFA 2021 dataset and extracted IRSD scores.
+
+6.  Cleaned and standardised LGA names across datasets.
+
+7.  Joined VPHS and SEIFA data using LGA names.
+
+8.  Created a final analysis dataset containing:
+
+    -   LGA name
+
+    -   Psychological distress
+
+    -   Low life satisfaction
+
+    -   Food insecurity
+
+    -   IRSD score
+
+9.  Saved the processed dataset as analysis_data.csv.
+
+10. Joined the processed dataset to ABS boundary files for mapping.
+
+**Data Dictionary**
+
+The final dataset contains the following variables:
+
+| Variable | Description |
+|----|----|
+| lga_name | Victorian Local Government Area name |
+| distress_pct | Percentage reporting high or very high psychological distress |
+| life_satisfaction_pct | Percentage reporting low life satisfaction |
+| food_insecurity_pct | Percentage reporting food insecurity |
+| irsd_score | ABS Index of Relative Socioeconomic Disadvantage score |
+| geometry | Spatial boundary information used for mapping |
+
+# 
+
+## Metadata and Supporting Files
+
+The project repository contains additional files that support reproducibility and transparency:
+
+-   Raw VPHS 2020 dataset.
+
+-   Raw SEIFA 2021 dataset.
+
+-   ABS LGA boundary shapefiles.
+
+-   Processed analysis dataset (analysis_data.csv).
+
+-   Version 1–4 development files showing the iterative analysis process.
+
+-   Git commit history documenting project progression.
+
+-   Quarto source files used to generate all outputs and visualisations.
+
+<!-- Task 2 Tab: Writing your blogpost -->
+
+## Blog post
+
+**What Explains Psychological Distress Across Victorian Communities? Exploring Wellbeing, Disadvantage and Geography**
+
+# Motivation
+
+Data for analysis are from the Victorian Population Health Survey (VPHS) 2020, Australian Bureau of Statistics (ABS) Socio-Economic Indexes for Areas (SEIFA) 2021 dataset and ABS Local Government Area boundary files.
+
+The VPHS data contains measures of psychological distress, life satisfaction and food insecurity by LGA in Victoria. These indicators have been chosen for being significant aspects of mental wellbeing and social conditions.
+
+The SEIFA data provides the Index of Relative Socio-economic Disadvantage (IRSD) which is widely used to indicate the relative level of disadvantage in Australian communities. Maps were made of the distribution of wellbeing indicators using ABS boundary files.
+
+The final analysis dataset included 75 Victorian Local Governments Areas (LGAs) for psychological distress, life satisfaction, food insecurity and socioeconomic disadvantage information.
+
+# Data
+
+Data for the analysis was supplied by the Victorian Population Health Survey (VPHS) 2020; the Australian Bureau of Statistics (ABS) Socio-Economic Indexes for Areas (SEIFA) 2021 dataset and the ABS Local Government Area boundary files.
+
+The VPHS dataset includes indicators of psychological distress, life satisfaction and food insecurity at the local level (LGAs) in Victoria. They were chosen as indicators because they are important aspects of mental wellbeing and social conditions.
+
+The SEIFA dataset supplies the Index of Relative Socio-economic Disadvantage (IRSD) which is often used to indicate the relative level of disadvantage in Australian communities. Maps were developed using ABS boundary files which were used to map the geographic distribution of wellbeing indicators.
+
+Following data cleaning and integration the final analysis dataset consisted of 75 Victorian LGAs with data on psychological distress, life satisfaction, food insecurity and socioeconomic factors.
+
+# Analysis
+
+**How does psychological distress vary across Victoria?**
+
+The first aim of this analysis was to explore the differences between Victorian communities in their levels of psychological distress. The results reveal substantial differences between local government areas. Psychological distress rates of less than 10% were reported by some LGA, while others reported rates of more than 30%.
+
+Distribution of psychological distress shows unequal experience across Victoria for mental wellbeing. A number of LGAs had significantly higher levels of distress than the state average, indicating that there may be local factors affecting wellbeing outcomes. The histogram and geographic visualisation demonstrate that there is not a statewide level of distress, but rather unevenly spread, which reinforces the need to look at wellbeing at the community level, not statewide averages.
+
+Darebin, Whittlesea, Moreland, Knox and Port Phillip had the highest levels of psychological distress. The lowest level of distress was in South Gippsland, Queenscliffe, Buloke, Southern Grampians and Swan Hill. These differences suggest there is significant variation in mental wellbeing outcomes between Victorian communities.
+
+```{r, echo=FALSE}
+ggplot(
+  analysis_data,
+  aes(x = distress_pct)
+) +
+  geom_histogram(bins = 15) +
+  labs(
+    title = "Distribution of psychological distress across Victorian LGAs",
+    x = "High or very high psychological distress (%)",
+    y = "Number of LGAs"
+  )
+```
+
+```{r,echo=FALSE}
+analysis_data %>%
+  arrange(desc(distress_pct)) %>%
+  select(lga_name, distress_pct, food_insecurity_pct, irsd_score) %>%
+  slice_head(n = 5) %>%
+  knitr::kable(
+    digits = 2,
+    caption = "Five LGAs with the highest psychological distress"
+  )
+```
+
+```{r, echo=FALSE}
+analysis_data %>%
+  arrange(distress_pct) %>%
+  select(
+    lga_name,
+    distress_pct,
+    irsd_score,
+    food_insecurity_pct
+  ) %>%
+  slice_head(n = 5) %>%
+  knitr::kable(
+    digits = 2,
+    caption = "Five LGAs with the lowest psychological distress"
+  )
+```
+
+```{r,echo=FALSE}
+ggplot(map_data) +
+  geom_sf(
+    aes(fill = distress_pct),
+    colour = "white",
+    linewidth = 0.1
+  ) +
+  labs(
+    title = "Psychological distress across Victorian LGAs",
+    fill = "Distress (%)"
+  ) +
+  theme_minimal()
+```
+
+**Is life satisfaction associated with psychological distress?**
+
+The strongest associations found in this analysis were between low life satisfaction and psychological distress. There was a clear positive association between low life satisfaction and psychological distress within the scatterplot, with higher levels of low life satisfaction in the LGAs corresponding to higher levels of psychological distress.
+
+A high and significant positive correlation was found (r = 0.764, p \< 0.001) by Pearson correlation analysis. This suggests that there is a negative association between life satisfaction and psychological distress in communities with low life satisfaction scores.
+
+This is in line with other wellbeing research that tends to look at life satisfaction as a key indicator of mental health. The analysis can't confirm causation, but the relationship is strong and subjective wellbeing could be used to shed light on mental wellbeing outcomes in Victorian communities.
+
+-   Life satisfaction vs psychological distress scatterplot
+
+    ```{r, echo=FALSE}
+    ggplot(
+      analysis_data,
+      aes(
+        x = life_satisfaction_pct,
+        y = distress_pct
+      )
+    ) +
+      geom_point() +
+      geom_smooth(
+        method = "lm",
+        se = FALSE
+      ) +
+      labs(
+        title = "Low life satisfaction and psychological distress",
+        x = "Low life satisfaction (%)",
+        y = "Psychological distress (%)"
+      )
+    ```
+
+**Is socioeconomic disadvantage associated with psychological distress?**
+
+The Australian Bureau of Statistics (ABS) Index of Relative Socio-economic Disadvantage (IRSD) was used to describe socioeconomic disadvantage. A lower IRSD score reflects more disadvantages; a higher score reflects relative advantages.
+
+However, and somewhat surprisingly, few relationships were found between socioeconomic disadvantage and psychological distress. Using Pearson correlation analysis, the correlation coefficient was calculated to be -0.061, with little association between the two variables.
+
+This is supported by the geographic maps. There were also a number of relatively advantaged LGAs where distress was high, and some less advantaged LGAs where distress was comparatively low. Socio-economic disadvantage alone does not account for the differences in psychological distress experienced in communities across Victoria, these results indicate.
+
+Factors affecting mental wellbeing are multiply determined; social, economic, environmental and personal. Therefore, measures of disadvantage at the area level may only reflect a portion of the overall disadvantage.
+
+-   IRSD vs psychological distress scatterplot
+
+    ```{r, echo=FALSE}
+    ggplot(
+      analysis_data,
+      aes(
+        x = irsd_score,
+        y = distress_pct
+      )
+    ) +
+      geom_point() +
+      geom_smooth(
+        method = "lm",
+        se = FALSE
+      ) +
+      labs(
+        title = "Socioeconomic disadvantage and psychological distress",
+        x = "IRSD score",
+        y = "Psychological distress (%)"
+      )
+    ```
+
+-   IRSD map
+
+    ```{r, echo=FALSE}
+    ggplot(map_data) +
+      geom_sf(
+        aes(fill = irsd_score),
+        colour = "white",
+        linewidth = 0.1
+      ) +
+      labs(
+        title = "Socioeconomic disadvantage across Victorian LGAs",
+        fill = "IRSD"
+      ) +
+      theme_minimal()
+    ```
+
+**Is food insecurity associated with psychological distress?**
+
+An extra measure of social disadvantage, food insecurity, was added. Communities with higher levels of food insecurity might also be associated with worse mental wellbeing outcomes.
+
+But the findings indicated little correlation between food insecurity and psychological distress. The Pearson correlation coefficient was essentially zero (r = -0.004) and the correlation was not statistically significant.
+
+This may be because food insecurity could be a more personal and/or household issue than one at a LGA level as analysed. Food insecurity, although a significant social issue, was not thought to be a factor in the variation in psychological distress that was seen across Victorian LGAs in this dataset.
+
+-   Food insecurity vs psychological distress scatterplot
+
+    ```{r, echo=FALSE, warning=FALSE}
+    ggplot(
+      analysis_data,
+      aes(
+        x = food_insecurity_pct,
+        y = distress_pct
+      )
+    ) +
+      geom_point() +
+      geom_smooth(
+        method = "lm",
+        se = FALSE
+      ) +
+      labs(
+        title = "Food insecurity and psychological distress",
+        x = "Food insecurity (%)",
+        y = "Psychological distress (%)"
+      )
+    ```
+
+### Conclusion
+
+This analysis explored differences in mental health and wellbeing outcomes between Victorian local government areas, and the relationship with socioeconomic disadvantage, food insecurity and life satisfaction.
+
+There was significant community to community variation in psychological distress that was revealed in the results. There were also significant local differences, with some LGAs having levels below 10% and some above 30%, indicating distress levels which were not captured in the statewide averages.
+
+The lowest level of life satisfaction was most strongly associated with psychological distress among the factors studied. The incidence of psychological distress was also higher in communities with higher Low Life Satisfaction scores. Conversely, there were no significant socioeconomic disadvantage or food insecurity links with psychological distress at the LGA level.
+
+The results indicate that subjective wellbeing measures can contribute a greater understanding of community mental health outcomes than can area-level socioeconomic measures. The analysis also emphasizes the importance of using both statistical and spatial methods in the research of public health issues. The results are not considered to be causal relationships but they do offer a good amount of evidence that mental wellbeing is significantly different between Victorian communities and is affected by a range of factors that are wider than the traditional determinants of disadvantage.
+
+**Refrences**
+
+Australian Bureau of Statistics. (2023). "*Local Government Area Boundaries, Australia, 2021"*.Australian Bureau of Statistics. Retrieved from <https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files>
+
+Australian Bureau of Statistics. (2023). *Socio-Economic Indexes for Areas (SEIFA), 2021*. Australian Bureau of Statistics. Retrieved from <https://www.abs.gov.au/statistics/people/people-and-communities/socio-economic-indexes-areas-seifa-australia/latest-release>
+
+Victorian Agency for Health Information. (2023). *Victorian Population Health Survey 2020 Dashboard*. Victorian Government. Retrieved from <https://www.vahi.vic.gov.au/victorian-population-health-survey>
+
+**Data Files Used**
+
+-   Victorian Population Health Survey 2020 Dashboard Workbook (`2020 VPHS Dashboard_FINAL.xlsm`)
+
+-   SEIFA 2021 Local Government Area Indexes Workbook (Local Government Area, Indexes, SEIFA 2021.xlsx)
+
+-   ABS 2021 Local Government Area Boundary Shapefile (LGA_2021_AUST_GDA2020_SHP)
+
+<!-- Task 3 Tab: Behind the Scenes -  -->
+
+## Behind the Scenes
+
+**1. What parts of your data processing or analysis were not "sexy"?**
+
+Much of the effort in this project was in data cleaning and preparation, and not so much in the analysis. Many of the indicators in the Victorian Population Health Survey workbook were not directly relevant to my research question, so took a lot of time to identify which indicators could measure mental wellbeing and socioeconomic factors. The SEIFA dataset also needed to be cleaned as useful information was not available in a tidy format and a number of header rows needed to be discarded before it could be analysed.
+
+One of the other time consuming activities was ensuring that the names of the LGA correspondences were consistent between the datasets. There was a problem matching up names on the tables, due to minor deviations in their names, which had to be resolved. It was necessary to make repeated checks of the joins, validate values and ensure that variables were coded as numeric data in order to create the final analysis data set.
+
+These tasks were not really apparent in the final blog post, but were important to getting reliable results. The use of R packages like tidyverse, readxl and sf facilitated a lot of automation in the cleaning process and reduced the number of manual edits needed
+
+**2. What challenges did you face during the analysis?**
+
+One difficulty was determining what to measure mental wellbeing with the data that was available in the surveys. Many indicators are present in the Victorian Population Health Survey, and when choosing variables that were meaningful and appropriate for analysis, the variables had to be explored carefully. At first, I thought there would be high and strong relationships between socioeconomic disadvantage and food insecurity with psychological distress, but there were rather low and weak relationships.
+
+The second difficulty was bringing together a number of data sets from various sources. Data integration was more challenging than anticipated because of the different formats and structure of the data in the VPHS, SEIFA and boundary files. Another learning curve for me was working with spatial data with the sf package. Spatial joins and geographic data structures were new concepts that had to be learned for creating choropleth maps.
+
+I really liked one aspect that was working to be able to merge the health, socioeconomic and spatial data into a single reproducible workflow. This enabled me to investigate the research question from several different analytical angles and not just one that was based on statistics.
+
+**3. What are the limitations of your work and how could it be improved?**
+
+The interpretation of the results had several limitations. First, the analysis was done at the Local Government Area (LGA) level, this means that relationships found among variables are not between individuals but between communities. The results are thus not considered to be indicative of individual-level behaviour or outcomes.
+
+Second, there are only a few wellbeing indicators that could be included in the project, because of time and scope constraints. The factors that influence mental health are numerous and varied, such as housing affordability, employment, physical health, social support or access to health care services, not addressed in this analysis.
+
+Thirdly, the data were gathered at different years, with VPHS data showing conditions in 2020 and SEIFA data showing conditions in 2021. The difference is small but might affect the strength of some observed relationships.
+
+In subsequent development of this project, I would include more indicators and explore the changes over time instead of cross-sectional analysis. I would also look at smaller geographic areas, such as SA2 regions, to uncover more localised trends and patterns in mental wellbeing.
+
+**4. How did you use AI during this assignmnet?**
+
+The project incorporated the use of AI for learning and support. It helped in grasping new R functions, debugging code, optimizing data manipulation steps, and enhancing the readability of written documentation. AI proved to be a valuable asset in scenarios involving spatial data and determining strategies for data integration across various sources.
+
+But AI-generated content did not get accepted without verification. All recommended code was first modified and run in R and output was verified against the data to confirm that outputs were accurate and meaningful. In some instances, the proposed ideas from AI needed tweaking due to structural differences between the data being analyzed and the AI's suggestions.
+
+The most helpful part of the AI was aiding me in comprehending new techniques and concepts, especially in the area of data wrangling and spatial analysis.
+
+**5. Reflection on the iterative process and GitHub versions**
+
+The project developed substantially through multiple iterations recorded within the GitHub repository.
+
+**Version 1** focused on refining the research question, identifying the appropriate data sets and developing the overall strategy for analysis.
+
+**Version 2** involved in loading and inspection of the datasets. In this stage I reviewed available indicators, assessed data quality and identified variables relevant to mental wellbeing and socioeconomic disadvantage.
+
+**Version 3** focused on data cleaning, transformation and integration. The VPHS, SEIFA and boundary datasets were processed and combined into a single analysis dataset suitable for statistical analysis and mapping.
+
+**Version 4** expanded the analysis through descriptive statistics, correlation testing, visualisations and spatial mapping. Additional analyses comparing metropolitan and regional LGAs were also introduced.
+
+The final project was much more expansive than my original checklist submission. The analysis moved from a simple consideration of disadvantage and mental wellbeing to a more detailed one including statistical, socioeconomic and spatial points of view. These improvements are openly recorded in the GitHub commit history and show the iterative refinement and continuous testing that happened through the project’s lifetime.
+:::
