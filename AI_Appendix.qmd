@@ -1,0 +1,53 @@
+---
+title: "AI_Appendix"
+format: html
+editor: visual
+---
+
+# AI Appendix
+
+## AI Tool Used
+
+ChatGPT
+
+## Purpose of AI Use
+
+AI was used as a learning, debugging and conceptual support tool for the entire project. It was useful to understand unknown R functions, to search for appropriate analytical methods, to debug coding problems, to enhance reproducibility practices and to strengthen the interpretation of results. All code and written outputs generated with AI assistance were independently tested, reviewed and modified as required before acceptance into the project.
+
+## Example Prompts Used:
+
+1.  I am completing a project about mental health and wellbeing across Victorian Local Government Areas. Help me refine a research question that investigates the relationship between psychological distress and socioeconomic disadvantage.
+
+2.  I have downloaded a health survey related dashboard workbook. What steps should I follow to explore the workbook structure and identify variables relevant to mental health and wellbeing?
+
+3.  Which indicators would be most suitable for measuring mental wellbeing in a mental health related dataset and why?
+
+4.  Explain how psychological distress, life satisfaction and food insecurity might each be related to mental wellbeing.
+
+5.  I want to combine health survey data and another dataset using Local Government Area names. What common problems occur when joining datasets and how can I identify and fix them in R?
+
+6.  Explain how I can create a clean analysis dataset in R from multiple sources while maintaining reproducibility.
+
+7.  I have a dataset containing psychological distress, life satisfaction, food insecurity and IRSD scores. Suggest some exploratory analyses that would help answer my research question.
+
+8.  Explain when a scatterplot is appropriate and how I should interpret patterns and regression lines when comparing two variables.
+
+9.  Explain Pearson correlation coefficients, p values and statistical significance in simple terms suitable for a data analysis report.
+
+10. I am investigating whether socioeconomic disadvantage is associated with psychological distress. How should I interpret a weak or non-significant correlation?
+
+11. I am new to the sf package in R. Explain how shapefiles work and how attribute data can be joined to geographic boundary files.
+
+12. What are some good practices for creating choropleth maps in ggplot2 and interpreting spatial patterns responsibly?
+
+13. Explain the concept of ecological fallacy and why it is important when interpreting area level health data.
+
+14. What types of reflections are appropriate for a "Behind the Scenes" section in a data analysis assignment?
+
+15. Give me git commands to remove a file that has already been pushed to a GitHub repository.
+
+AI generated suggestions were not accepted automatically. All code was executed and tested within R, outputs were compared against the underlying datasets, and interpretations were verified against the statistical results obtained during the analysis. Where AI generated suggestions did not align with the structure of the datasets, the outputs were modified or discarded.
+
+## Shared Conversation Link
+
+<https://chatgpt.com/share/6a2e5c59-de88-83ec-be46-d273a1dae59a>
